@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Architecture - Downloader Studio - Downloader Studio</title>
+    <style>:root {
+    --bg: #09090b;
+    --surface: #0f0f12;
+    --panel: #18181b;
+    --panel-alt: #27272a;
+    --border: #3f3f46;
+    --text: #fafafa;
+    --muted: #a1a1aa;
+    --accent: #f59e0b;
+    --accent-text: #18181b;
+    --ring: rgba(245, 158, 11, 0.35);
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text);
+    background: var(--bg);
+    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+}
+a { color: var(--accent); text-decoration: none; font-weight: 700; }
+a:hover { text-decoration: underline; }
+.shell { min-height: 100vh; display: grid; grid-template-columns: 260px minmax(0, 1fr); }
+.sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 24px 18px;
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+.brand { display: flex; align-items: center; gap: 12px; padding: 0 6px 18px; border-bottom: 1px solid var(--border); }
+.brand img { width: 42px; height: 42px; object-fit: contain; }
+.brand strong, .brand span { display: block; line-height: 1.05; }
+.brand strong { font-size: 13px; }
+.brand span { margin-top: 3px; color: var(--accent); font-size: 11px; font-weight: 800; text-transform: uppercase; }
+.nav-label { color: var(--muted); font-size: 11px; font-weight: 800; text-transform: uppercase; }
+.nav-list { display: grid; gap: 8px; }
+.nav-list a {
+    display: block;
+    padding: 10px 12px;
+    border-left: 4px solid transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+}
+.nav-list a:hover { color: var(--text); background: var(--panel-alt); border-left-color: var(--accent); text-decoration: none; }
+.sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+.main { min-width: 0; padding: 34px min(5vw, 58px) 52px; }
+.article {
+    max-width: 980px;
+    padding-bottom: 42px;
+}
+.article-header { padding-bottom: 22px; margin-bottom: 28px; border-bottom: 1px solid var(--border); }
+.eyebrow { margin: 0 0 8px; color: var(--accent); font-size: 12px; font-weight: 800; text-transform: uppercase; }
+h1 { margin: 0; font-size: clamp(30px, 4vw, 48px); line-height: 1.08; letter-spacing: 0; }
+h2 { margin: 34px 0 12px; font-size: 22px; }
+h3 { margin: 26px 0 10px; font-size: 17px; color: var(--text); }
+h4 { margin: 22px 0 8px; font-size: 15px; color: var(--accent); }
+p { margin: 0 0 14px; color: var(--muted); }
+ul, ol { margin: 0 0 18px 20px; padding: 0; color: var(--muted); }
+li { margin: 6px 0; }
+li strong, p strong { color: var(--text); }
+code { padding: 2px 5px; border: 1px solid var(--border); border-radius: 4px; background: var(--panel); color: var(--text); font-family: Consolas, Monaco, monospace; font-size: 0.92em; }
+pre { margin: 16px 0 22px; padding: 16px; overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); }
+pre code { padding: 0; border: 0; background: transparent; }
+table { width: 100%; margin: 16px 0 24px; border-collapse: collapse; border: 1px solid var(--border); background: var(--surface); }
+th, td { padding: 10px 12px; border: 1px solid var(--border); text-align: left; }
+th { color: var(--accent); background: var(--panel); }
+hr { margin: 32px 0; border: 0; border-top: 1px solid var(--border); }
+.back-link { display: inline-flex; margin-bottom: 18px; color: var(--accent); font-weight: 800; }
+@media (max-width: 860px) {
+    .shell { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; }
+    .main { padding: 26px 18px 38px; }
+}</style>
+</head>
+<body>
+    <div class="shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <img src="../assets/downloader-studio-logo.png" alt="Downloader Studio">
+                <div><strong>Downloader</strong><span>Studio</span></div>
+            </div>
+            <div>
+                <p class="nav-label">Documentation</p>
+                <nav class="nav-list"><a href="../index.html">Hub</a>
+<a href="../fr/index.html">Fran?ais</a>
+<a href="../en/index.html">English</a>
+<a href="../de/index.html">Deutsch</a>
+<a href="../es/index.html">Espa?ol</a></nav>
+            </div>
+            <div class="sidebar-footer">Documentation v2.11<br>MIT License</div>
+        </aside>
+        <main class="main">
+            <article class="article">
+                <a class="back-link" href="../index.html">? Documentation hub</a>
+                <div class="article-header">
+                    <p class="eyebrow">Downloader Studio</p>
+                    <h1>Architecture - Downloader Studio</h1>
+                </div>
+                
+<p>Downloader Studio est une application PyQt5 structurée autour de trois zones principales : interface, moteur de téléchargement et ressources partagées.</p>
+<h2>Vue d&#x27;ensemble</h2>
+<pre><code>main.py
+└── app/ui/main_window.py
+    ├── pages/search_page.py
+    ├── pages/queue_page.py
+    ├── pages/settings_page.py
+    ├── pages/logs_page.py
+    ├── minimal_window.py
+    └── app/core/download_engine.py
+        └── yt-dlp</code></pre>
+<h2>Interface</h2>
+<p><code>app/ui/main_window.py</code> contient la fenêtre principale, la sidebar, le changement de thème, le splash screen et la reconstruction des pages quand la langue change.</p>
+<p>Les pages sont séparées par responsabilité :</p>
+<ul>
+<li><code>search_page.py</code> : recherche, sélection de format, téléchargement direct et ajout à la file.</li>
+<li><code>queue_page.py</code> : file d&#x27;attente, progression globale et historique.</li>
+<li><code>settings_page.py</code> : langue, thème, sources, formats, qualité et dossier de sortie.</li>
+<li><code>logs_page.py</code> : journal d&#x27;activité et export texte.</li>
+<li><code>minimal_window.py</code> : mode flottant compact activé avec <code>Ctrl+M</code>.</li>
+</ul>
+<h2>Moteur</h2>
+<p><code>app/core/download_engine.py</code> porte la logique de téléchargement :</p>
+<ul>
+<li>création des tâches ;</li>
+<li>déduplication de la file ;</li>
+<li>exécution asynchrone via <code>QThread</code> ;</li>
+<li>intégration <code>yt-dlp</code> ;</li>
+<li>signaux de progression, historique et logs.</li>
+</ul>
+<p>Le dossier de sortie par défaut est <code>%USERPROFILE%\Downloads</code>.</p>
+<h2>Traductions</h2>
+<p>Les textes applicatifs sont centralisés dans <code>i18n/translations.py</code>. Le changement de langue met à jour le traducteur global, reconstruit les pages et recrée la sidebar pour éviter les anciens widgets dans la mauvaise langue.</p>
+<p>Langues disponibles :</p>
+<ul>
+<li>français ;</li>
+<li>anglais ;</li>
+<li>allemand ;</li>
+<li>espagnol.</li>
+</ul>
+<h2>Ressources</h2>
+<p><code>app/utils/resources.py</code> résout les chemins pour trois contextes :</p>
+<ol>
+<li>exécution Python directe ;</li>
+<li>exécutable PyInstaller ;</li>
+<li>installation Inno Setup.</li>
+</ol>
+<p>Les assets visuels sont dans <code>assets/</code>.</p>
+<h2>Build</h2>
+<p>Le build Windows utilise :</p>
+<ul>
+<li><code>build_exe.py</code> pour générer <code>dist/DownloaderStudio.exe</code> ;</li>
+<li><code>Downloader_Studio.iss</code> pour produire l&#x27;installateur Windows.</li>
+</ul>
+<p>Voir aussi : <a href="guide-construction.html">Guide de construction</a>.</p>
+            </article>
+        </main>
+    </div>
+</body>
+</html>

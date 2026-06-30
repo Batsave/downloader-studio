@@ -27,12 +27,14 @@ Downloaded files are written to the user's Downloads folder by default: `%USERPR
 
 Open [docs/index.html](docs/index.html) in a browser for the visual documentation hub.
 
-Markdown guides:
+GitHub Pages URL after deployment: `https://batsave.github.io/downloader-studio/`
 
-- [French documentation](docs/fr/index.md)
-- [English documentation](docs/en/index.md)
-- [German documentation](docs/de/index.md)
-- [Spanish documentation](docs/es/index.md)
+HTML guides:
+
+- [French documentation](docs/fr/index.html)
+- [English documentation](docs/en/index.html)
+- [German documentation](docs/de/index.html)
+- [Spanish documentation](docs/es/index.html)
 
 ## Build
 
@@ -46,15 +48,15 @@ Then compile `Downloader_Studio.iss` with Inno Setup to create the Windows insta
 
 ```text
 downloader-studio/
-├── app/
-│   ├── core/        # Download engine and workers
-│   ├── ui/          # PyQt5 windows and pages
-│   └── utils/       # Icons and resource helpers
-├── i18n/            # Translation table
-├── assets/          # Logo and UI assets
-├── docs/            # Documentation hub and markdown guides
-├── main.py          # Application entry point
-└── requirements.txt
+|-- app/
+|   |-- core/        # Download engine and workers
+|   |-- ui/          # PyQt5 windows and pages
+|   `-- utils/       # Icons and resource helpers
+|-- i18n/            # Translation table
+|-- assets/          # Logo and UI assets
+|-- docs/            # HTML documentation hub and guides
+|-- main.py          # Application entry point
+`-- requirements.txt
 ```
 
 ## License
