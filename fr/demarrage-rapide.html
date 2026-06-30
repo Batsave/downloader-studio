@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Démarrage Rapide - Downloader Studio - Downloader Studio</title>
+    <style>:root {
+    --bg: #09090b;
+    --surface: #0f0f12;
+    --panel: #18181b;
+    --panel-alt: #27272a;
+    --border: #3f3f46;
+    --text: #fafafa;
+    --muted: #a1a1aa;
+    --accent: #f59e0b;
+    --accent-text: #18181b;
+    --ring: rgba(245, 158, 11, 0.35);
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text);
+    background: var(--bg);
+    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    line-height: 1.6;
+}
+a { color: var(--accent); text-decoration: none; font-weight: 700; }
+a:hover { text-decoration: underline; }
+.shell { min-height: 100vh; display: grid; grid-template-columns: 260px minmax(0, 1fr); }
+.sidebar {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    padding: 24px 18px;
+    background: var(--panel);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+.brand { display: flex; align-items: center; gap: 12px; padding: 0 6px 18px; border-bottom: 1px solid var(--border); }
+.brand img { width: 42px; height: 42px; object-fit: contain; }
+.brand strong, .brand span { display: block; line-height: 1.05; }
+.brand strong { font-size: 13px; }
+.brand span { margin-top: 3px; color: var(--accent); font-size: 11px; font-weight: 800; text-transform: uppercase; }
+.nav-label { color: var(--muted); font-size: 11px; font-weight: 800; text-transform: uppercase; }
+.nav-list { display: grid; gap: 8px; }
+.nav-list a {
+    display: block;
+    padding: 10px 12px;
+    border-left: 4px solid transparent;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+}
+.nav-list a:hover { color: var(--text); background: var(--panel-alt); border-left-color: var(--accent); text-decoration: none; }
+.sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; }
+.main { min-width: 0; padding: 34px min(5vw, 58px) 52px; }
+.article {
+    max-width: 980px;
+    padding-bottom: 42px;
+}
+.article-header { padding-bottom: 22px; margin-bottom: 28px; border-bottom: 1px solid var(--border); }
+.eyebrow { margin: 0 0 8px; color: var(--accent); font-size: 12px; font-weight: 800; text-transform: uppercase; }
+h1 { margin: 0; font-size: clamp(30px, 4vw, 48px); line-height: 1.08; letter-spacing: 0; }
+h2 { margin: 34px 0 12px; font-size: 22px; }
+h3 { margin: 26px 0 10px; font-size: 17px; color: var(--text); }
+h4 { margin: 22px 0 8px; font-size: 15px; color: var(--accent); }
+p { margin: 0 0 14px; color: var(--muted); }
+ul, ol { margin: 0 0 18px 20px; padding: 0; color: var(--muted); }
+li { margin: 6px 0; }
+li strong, p strong { color: var(--text); }
+code { padding: 2px 5px; border: 1px solid var(--border); border-radius: 4px; background: var(--panel); color: var(--text); font-family: Consolas, Monaco, monospace; font-size: 0.92em; }
+pre { margin: 16px 0 22px; padding: 16px; overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); }
+pre code { padding: 0; border: 0; background: transparent; }
+table { width: 100%; margin: 16px 0 24px; border-collapse: collapse; border: 1px solid var(--border); background: var(--surface); }
+th, td { padding: 10px 12px; border: 1px solid var(--border); text-align: left; }
+th { color: var(--accent); background: var(--panel); }
+hr { margin: 32px 0; border: 0; border-top: 1px solid var(--border); }
+.back-link { display: inline-flex; margin-bottom: 18px; color: var(--accent); font-weight: 800; }
+@media (max-width: 860px) {
+    .shell { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; }
+    .main { padding: 26px 18px 38px; }
+}</style>
+</head>
+<body>
+    <div class="shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <img src="../assets/downloader-studio-logo.png" alt="Downloader Studio">
+                <div><strong>Downloader</strong><span>Studio</span></div>
+            </div>
+            <div>
+                <p class="nav-label">Documentation</p>
+                <nav class="nav-list"><a href="../index.html">Hub</a>
+<a href="../fr/index.html">Fran?ais</a>
+<a href="../en/index.html">English</a>
+<a href="../de/index.html">Deutsch</a>
+<a href="../es/index.html">Espa?ol</a></nav>
+            </div>
+            <div class="sidebar-footer">Documentation v2.11<br>MIT License</div>
+        </aside>
+        <main class="main">
+            <article class="article">
+                <a class="back-link" href="../index.html">? Documentation hub</a>
+                <div class="article-header">
+                    <p class="eyebrow">Downloader Studio</p>
+                    <h1>🚀 Démarrage Rapide - Downloader Studio</h1>
+                </div>
+                
+<p>Commencez à utiliser Downloader Studio en 5 minutes !</p>
+<h2>Installation</h2>
+<h3>Utilisateurs Windows</h3>
+<ol>
+<li><strong>Téléchargez l&#x27;installateur</strong> depuis les <a href="https://github.com/batsave/downloader-studio/releases">Releases</a></li>
+<li><strong>Exécutez</strong> <code>DownloaderStudio_Setup.exe</code></li>
+<li><strong>Suivez l&#x27;assistant d&#x27;installation</strong></li>
+<li><strong>Lancez</strong> depuis le Menu Démarrer ou le Bureau</li>
+</ol>
+<h3>Développeurs</h3>
+<pre><code># Clonez le dépôt
+git clone https://github.com/batsave/downloader-studio.git
+cd downloader-studio
+
+# Installez les dépendances
+pip install -r requirements.txt
+
+# Lancez l&#x27;application
+python main.py</code></pre>
+<h2>Utilisation de Base</h2>
+<h3>1️⃣ Rechercher du Contenu</h3>
+<ul>
+<li>Allez à l&#x27;onglet <strong>Recherche</strong></li>
+<li>Entrez un URL ou une requête</li>
+<li>Sélectionnez le format et la qualité</li>
+<li>Cliquez <strong>Télécharger</strong></li>
+</ul>
+<h3>2️⃣ Gérer la File d&#x27;Attente</h3>
+<ul>
+<li>Allez à l&#x27;onglet <strong>File d&#x27;attente</strong></li>
+<li>Voyez tous les téléchargements en attente</li>
+<li>Cliquez <strong>Lancer la file</strong> pour commencer</li>
+</ul>
+<h3>3️⃣ Configurer l&#x27;Application</h3>
+<ul>
+<li>Allez à <strong>Paramètres</strong></li>
+<li>Choisissez la langue (FR, EN, DE, ES)</li>
+<li>Sélectionnez le dossier de sortie</li>
+<li>Configurez les formats par défaut</li>
+</ul>
+<h2>🌍 Changer la Langue</h2>
+<ol>
+<li><strong>Paramètres</strong> → <strong>Apparence</strong> → <strong>Thème</strong></li>
+<li>Choisissez votre langue:</li>
+</ol>
+<ul>
+<li>🇫🇷 Français</li>
+<li>🇬🇧 English</li>
+<li>🇩🇪 Deutsch</li>
+<li>🇪🇸 Español</li>
+</ul>
+<h2>📦 Mode Minimaliste</h2>
+<p>Pressez <strong>Ctrl+M</strong> pour ouvrir une petite fenêtre flottante pour les téléchargements rapides.</p>
+<h2>🎨 Thèmes</h2>
+<ul>
+<li><strong>Sombre</strong> (par défaut) - Parfait pour une utilisation prolongée</li>
+<li><strong>Clair</strong> - Idéal pour les environnements bien éclairés</li>
+</ul>
+<h2>📋 Formats Supportés</h2>
+<p><strong>Vidéo:</strong></p>
+<ul>
+<li>MP4 (Full HD 1080p)</li>
+<li>WebM</li>
+</ul>
+<p><strong>Audio:</strong></p>
+<ul>
+<li>MP3 (320kbps)</li>
+<li>WAV</li>
+<li>M4A</li>
+</ul>
+<h2>🔗 Sources Supportées</h2>
+<ul>
+<li>YouTube</li>
+<li>SoundCloud</li>
+</ul>
+<h2>⚙️ Dossier de Sortie</h2>
+<p>Les fichiers téléchargés vont dans le dossier configuré (par défaut: <code>%USERPROFILE%\Downloads</code>).</p>
+<h2>🆘 Dépannage</h2>
+<p><strong>L&#x27;application ne démarre pas?</strong></p>
+<ul>
+<li>Vérifiez que Python 3.8+ est installé</li>
+<li>Réinstallez les dépendances: <code>pip install -r requirements.txt</code></li>
+</ul>
+<p><strong>Les icônes ne s&#x27;affichent pas?</strong></p>
+<ul>
+<li>Vérifiez que le dossier <code>assets/</code> existe</li>
+<li>Relancez l&#x27;application</li>
+</ul>
+<p><strong>Problème avec un téléchargement?</strong></p>
+<ul>
+<li>Consultez l&#x27;onglet <strong>Logs</strong></li>
+<li>Vérifiez votre connexion internet</li>
+</ul>
+<h2>📞 Besoin d&#x27;Aide?</h2>
+<ul>
+<li>📖 Lire la <a href="index.html">documentation complète</a></li>
+<li>🐛 <a href="https://github.com/batsave/downloader-studio/issues">Signaler un problème</a></li>
+<li>💬 <a href="https://github.com/batsave/downloader-studio/discussions">Poser une question</a></li>
+</ul>
+<hr>
+<p><strong>Bonne utilisation !</strong> 🎉</p>
+            </article>
+        </main>
+    </div>
+</body>
+</html>
