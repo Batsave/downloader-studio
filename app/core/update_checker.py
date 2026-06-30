@@ -76,6 +76,7 @@ class UpdateCheckThread(QThread):
                 "name": release.get("name") or version,
                 "url": select_download_url(release),
                 "release_url": release.get("html_url") or APP_RELEASES_URL,
+                "notes": release.get("body") or "",
             })
         except Exception as exc:
             self.check_failed.emit(str(exc)[:160])

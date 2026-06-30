@@ -7,15 +7,33 @@ import os
 import shutil
 import subprocess
 import sys
+import time
+
+def remove_tree(path, max_retries=3):
+    """Remove directory tree with retry logic for locked files"""
+    for attempt in range(max_retries):
+        try:
+            shutil.rmtree(path)
+            print(f"Cleaned {path}/")
+            return True
+        except PermissionError as e:
+            if attempt < max_retries - 1:
+                print(f"Warning: {path} is locked, retrying in 2 seconds...")
+                time.sleep(2)
+            else:
+                print(f"Error: Cannot remove {path} - file may be in use")
+                print("Close any running instances and try again")
+                return False
+    return False
 
 def build():
     """Build executable with PyInstaller"""
-    
+
     # Clean previous builds
     for folder in ['build', 'dist', '__pycache__']:
         if os.path.exists(folder):
-            shutil.rmtree(folder)
-            print(f"Cleaned {folder}/")
+            if not remove_tree(folder):
+                sys.exit(1)
     
     # PyInstaller command
     cmd = [

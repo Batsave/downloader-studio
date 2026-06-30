@@ -1,244 +1,467 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>📖 About - Downloader Studio - Downloader Studio</title>
-    <style>:root {
-    --bg: #09090b;
-    --surface: #0f0f12;
-    --panel: #18181b;
-    --panel-alt: #27272a;
-    --border: #3f3f46;
-    --text: #fafafa;
-    --muted: #a1a1aa;
-    --accent: #f59e0b;
-    --accent-text: #18181b;
-    --ring: rgba(245, 158, 11, 0.35);
-}
-* { box-sizing: border-box; }
-html { background: var(--bg); }
-body {
-    margin: 0;
-    min-height: 100vh;
-    color: var(--text);
-    background: var(--bg);
-    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    line-height: 1.6;
-}
-a { color: var(--accent); text-decoration: none; font-weight: 700; }
-a:hover { text-decoration: underline; }
-.shell { min-height: 100vh; display: grid; grid-template-columns: 260px minmax(0, 1fr); }
-.sidebar {
-    position: sticky;
-    top: 0;
-    height: 100vh;
-    padding: 24px 18px;
-    background: var(--panel);
-    border-right: 1px solid var(--border);
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-}
-.brand { display: flex; align-items: center; gap: 12px; padding: 0 6px 18px; border-bottom: 1px solid var(--border); }
-.brand img { width: 42px; height: 42px; object-fit: contain; }
-.brand strong, .brand span { display: block; line-height: 1.05; }
-.brand strong { font-size: 13px; }
-.brand span { margin-top: 3px; color: var(--accent); font-size: 11px; font-weight: 800; text-transform: uppercase; }
-.nav-label { color: var(--muted); font-size: 11px; font-weight: 800; text-transform: uppercase; }
-.nav-list { display: grid; gap: 8px; }
-.nav-list a {
-    display: block;
-    padding: 10px 12px;
-    border-left: 4px solid transparent;
-    color: var(--muted);
-    font-size: 13px;
-    font-weight: 800;
-}
-.nav-list a:hover { color: var(--text); background: var(--panel-alt); border-left-color: var(--accent); text-decoration: none; }
-.sidebar-footer { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 12px; }
-.main { min-width: 0; padding: 34px min(5vw, 58px) 52px; }
-.article {
-    max-width: 980px;
-    padding-bottom: 42px;
-}
-.article-header { padding-bottom: 22px; margin-bottom: 28px; border-bottom: 1px solid var(--border); }
-.eyebrow { margin: 0 0 8px; color: var(--accent); font-size: 12px; font-weight: 800; text-transform: uppercase; }
-h1 { margin: 0; font-size: clamp(30px, 4vw, 48px); line-height: 1.08; letter-spacing: 0; }
-h2 { margin: 34px 0 12px; font-size: 22px; }
-h3 { margin: 26px 0 10px; font-size: 17px; color: var(--text); }
-h4 { margin: 22px 0 8px; font-size: 15px; color: var(--accent); }
-p { margin: 0 0 14px; color: var(--muted); }
-ul, ol { margin: 0 0 18px 20px; padding: 0; color: var(--muted); }
-li { margin: 6px 0; }
-li strong, p strong { color: var(--text); }
-code { padding: 2px 5px; border: 1px solid var(--border); border-radius: 4px; background: var(--panel); color: var(--text); font-family: Consolas, Monaco, monospace; font-size: 0.92em; }
-pre { margin: 16px 0 22px; padding: 16px; overflow-x: auto; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); }
-pre code { padding: 0; border: 0; background: transparent; }
-table { width: 100%; margin: 16px 0 24px; border-collapse: collapse; border: 1px solid var(--border); background: var(--surface); }
-th, td { padding: 10px 12px; border: 1px solid var(--border); text-align: left; }
-th { color: var(--accent); background: var(--panel); }
-hr { margin: 32px 0; border: 0; border-top: 1px solid var(--border); }
-.back-link { display: inline-flex; margin-bottom: 18px; color: var(--accent); font-weight: 800; }
-@media (max-width: 860px) {
-    .shell { grid-template-columns: 1fr; }
-    .sidebar { position: static; height: auto; }
-    .main { padding: 26px 18px 38px; }
-}</style>
-</head>
-<body>
-    <div class="shell">
-        <aside class="sidebar">
-            <div class="brand">
-                <img src="../assets/downloader-studio-logo.png" alt="Downloader Studio">
-                <div><strong>Downloader</strong><span>Studio</span></div>
-            </div>
-            <div>
-                <p class="nav-label">Documentation</p>
-                <nav class="nav-list"><a href="../index.html">Hub</a>
-<a href="../fr/index.html">Fran?ais</a>
-<a href="../en/index.html">English</a>
-<a href="../de/index.html">Deutsch</a>
-<a href="../es/index.html">Espa?ol</a></nav>
-            </div>
-            <div class="sidebar-footer">Documentation v2.11<br>MIT License</div>
-        </aside>
-        <main class="main">
-            <article class="article">
-                <a class="back-link" href="../index.html">? Documentation hub</a>
-                <div class="article-header">
-                    <p class="eyebrow">Downloader Studio</p>
-                    <h1>📖 About - Downloader Studio</h1>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>📖 About - Downloader Studio - Downloader Studio</title>
+        <style>
+            :root {
+                --bg: #09090b;
+                --surface: #0f0f12;
+                --panel: #18181b;
+                --panel-alt: #27272a;
+                --border: #3f3f46;
+                --text: #fafafa;
+                --muted: #a1a1aa;
+                --accent: #f59e0b;
+                --accent-text: #18181b;
+                --ring: rgba(245, 158, 11, 0.35);
+            }
+            * {
+                box-sizing: border-box;
+            }
+            html {
+                background: var(--bg);
+            }
+            body {
+                margin: 0;
+                min-height: 100vh;
+                color: var(--text);
+                background: var(--bg);
+                font-family:
+                    "Segoe UI",
+                    system-ui,
+                    -apple-system,
+                    BlinkMacSystemFont,
+                    sans-serif;
+                line-height: 1.6;
+            }
+            a {
+                color: var(--accent);
+                text-decoration: none;
+                font-weight: 700;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+            .shell {
+                min-height: 100vh;
+                display: grid;
+                grid-template-columns: 260px minmax(0, 1fr);
+            }
+            .sidebar {
+                position: sticky;
+                top: 0;
+                height: 100vh;
+                padding: 24px 18px;
+                background: var(--panel);
+                border-right: 1px solid var(--border);
+                display: flex;
+                flex-direction: column;
+                gap: 22px;
+            }
+            .brand {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 0 6px 18px;
+                border-bottom: 1px solid var(--border);
+            }
+            .brand img {
+                width: 42px;
+                height: 42px;
+                object-fit: contain;
+            }
+            .brand strong,
+            .brand span {
+                display: block;
+                line-height: 1.05;
+            }
+            .brand strong {
+                font-size: 13px;
+            }
+            .brand span {
+                margin-top: 3px;
+                color: var(--accent);
+                font-size: 11px;
+                font-weight: 800;
+                text-transform: uppercase;
+            }
+            .nav-label {
+                color: var(--muted);
+                font-size: 11px;
+                font-weight: 800;
+                text-transform: uppercase;
+            }
+            .nav-list {
+                display: grid;
+                gap: 8px;
+            }
+            .nav-list a {
+                display: block;
+                padding: 10px 12px;
+                border-left: 4px solid transparent;
+                color: var(--muted);
+                font-size: 13px;
+                font-weight: 800;
+            }
+            .nav-list a:hover {
+                color: var(--text);
+                background: var(--panel-alt);
+                border-left-color: var(--accent);
+                text-decoration: none;
+            }
+            .sidebar-footer {
+                margin-top: auto;
+                padding-top: 16px;
+                border-top: 1px solid var(--border);
+                color: var(--muted);
+                font-size: 12px;
+            }
+            .main {
+                min-width: 0;
+                padding: 34px min(5vw, 58px) 52px;
+            }
+            .article {
+                max-width: 980px;
+                padding-bottom: 42px;
+            }
+            .article-header {
+                padding-bottom: 22px;
+                margin-bottom: 28px;
+                border-bottom: 1px solid var(--border);
+            }
+            .eyebrow {
+                margin: 0 0 8px;
+                color: var(--accent);
+                font-size: 12px;
+                font-weight: 800;
+                text-transform: uppercase;
+            }
+            h1 {
+                margin: 0;
+                font-size: clamp(30px, 4vw, 48px);
+                line-height: 1.08;
+                letter-spacing: 0;
+            }
+            h2 {
+                margin: 34px 0 12px;
+                font-size: 22px;
+            }
+            h3 {
+                margin: 26px 0 10px;
+                font-size: 17px;
+                color: var(--text);
+            }
+            h4 {
+                margin: 22px 0 8px;
+                font-size: 15px;
+                color: var(--accent);
+            }
+            p {
+                margin: 0 0 14px;
+                color: var(--muted);
+            }
+            ul,
+            ol {
+                margin: 0 0 18px 20px;
+                padding: 0;
+                color: var(--muted);
+            }
+            li {
+                margin: 6px 0;
+            }
+            li strong,
+            p strong {
+                color: var(--text);
+            }
+            code {
+                padding: 2px 5px;
+                border: 1px solid var(--border);
+                border-radius: 4px;
+                background: var(--panel);
+                color: var(--text);
+                font-family: Consolas, Monaco, monospace;
+                font-size: 0.92em;
+            }
+            pre {
+                margin: 16px 0 22px;
+                padding: 16px;
+                overflow-x: auto;
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                background: var(--surface);
+            }
+            pre code {
+                padding: 0;
+                border: 0;
+                background: transparent;
+            }
+            table {
+                width: 100%;
+                margin: 16px 0 24px;
+                border-collapse: collapse;
+                border: 1px solid var(--border);
+                background: var(--surface);
+            }
+            th,
+            td {
+                padding: 10px 12px;
+                border: 1px solid var(--border);
+                text-align: left;
+            }
+            th {
+                color: var(--accent);
+                background: var(--panel);
+            }
+            hr {
+                margin: 32px 0;
+                border: 0;
+                border-top: 1px solid var(--border);
+            }
+            .back-link {
+                display: inline-flex;
+                margin-bottom: 18px;
+                color: var(--accent);
+                font-weight: 800;
+            }
+            @media (max-width: 860px) {
+                .shell {
+                    grid-template-columns: 1fr;
+                }
+                .sidebar {
+                    position: static;
+                    height: auto;
+                }
+                .main {
+                    padding: 26px 18px 38px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="shell">
+            <aside class="sidebar">
+                <div class="brand">
+                    <img
+                        src="../assets/downloader-studio-logo.png"
+                        alt="Downloader Studio"
+                    />
+                    <div><strong>Downloader</strong><span>Studio</span></div>
                 </div>
-                
-<h2>What is Downloader Studio?</h2>
-<p><strong>Downloader Studio</strong> is a modern and professional desktop application for downloading media from multiple sources with complete multilingual support and customizable themes.</p>
-<h3>Current Version</h3>
-<ul>
-<li><strong>v2.11</strong> - Stable Release</li>
-<li><strong>License</strong>: MIT (Open Source)</li>
-<li><strong>Platform</strong>: Windows 10/11</li>
-<li><strong>Python</strong>: 3.8+</li>
-</ul>
-<h2>Main Features</h2>
-<h3>🎥 Multi-Source Downloads</h3>
-<ul>
-<li>YouTube</li>
-<li>SoundCloud</li>
-<li>And more coming soon...</li>
-</ul>
-<h3>🎵 Multiple Formats</h3>
-<p><strong>Video:</strong></p>
-<ul>
-<li>MP4 (Full HD 1080p)</li>
-<li>WebM</li>
-</ul>
-<p><strong>Audio:</strong></p>
-<ul>
-<li>MP3 (320kbps)</li>
-<li>WAV</li>
-<li>M4A</li>
-</ul>
-<h3>🌍 4 Supported Languages</h3>
-<ul>
-<li>🇫🇷 Français</li>
-<li>🇬🇧 English</li>
-<li>🇩🇪 Deutsch</li>
-<li>🇪🇸 Español</li>
-</ul>
-<h3>🎨 Customizable Themes</h3>
-<ul>
-<li>Dark Mode (default)</li>
-<li>Light Mode</li>
-</ul>
-<h3>📦 Usage Modes</h3>
-<ul>
-<li><strong>Normal Mode</strong> - Full interface</li>
-<li><strong>Minimalist Mode</strong> - Compact window (Ctrl+M)</li>
-</ul>
-<h3>⚙️ Advanced Configuration</h3>
-<ul>
-<li>Output folder selection</li>
-<li>Default quality selection</li>
-<li>Enabled sources management</li>
-</ul>
-<h2>Architecture</h2>
-<p>The application is built with:</p>
-<ul>
-<li><strong>PyQt5</strong> - User interface</li>
-<li><strong>yt-dlp</strong> - Media downloading</li>
-<li><strong>Python 3.8+</strong> - Programming language</li>
-</ul>
-<p>Modern structure:</p>
-<ul>
-<li>Clear separation of concerns</li>
-<li>Code organized into logical packages</li>
-<li>All imports using absolute paths</li>
-<li>Compatible with PyInstaller and Inno Setup</li>
-</ul>
-<h2>Project History</h2>
-<p>Downloader Studio was born from the need for a simple yet powerful application to download videos and music quickly and efficiently.</p>
-<p>The project has grown to become a professional solution with:</p>
-<ul>
-<li>Modern and clean interface</li>
-<li>Complete multilingual support</li>
-<li>Professional build pipeline</li>
-<li>Easy distribution to users</li>
-</ul>
-<h2>Team</h2>
-<ul>
-<li><strong>Development</strong>: BS Studio</li>
-<li><strong>License</strong>: MIT</li>
-<li><strong>Contributors</strong>: Open Source Community</li>
-</ul>
-<h2>Vision</h2>
-<p>Our vision is to provide:</p>
-<p>✓ <strong>Simplicity</strong> - Easy to use for everyone ✓ <strong>Power</strong> - Advanced features for experienced users ✓ <strong>Multilingual</strong> - Accessible in different languages ✓ <strong>Open Source</strong> - Transparent and modifiable code ✓ <strong>Free</strong> - No hidden costs</p>
-<h2>Philosophy</h2>
-<p>Free and open source software is at the heart of Downloader Studio:</p>
-<ul>
-<li>Source code public on GitHub</li>
-<li>MIT License - free to use</li>
-<li>Community contributions welcome</li>
-<li>No ads or tracking</li>
-</ul>
-<h2>Acknowledgments</h2>
-<p>Thanks to:</p>
-<ul>
-<li><strong>PyQt5</strong> - Powerful UI framework</li>
-<li><strong>yt-dlp</strong> - Excellent download engine</li>
-<li><strong>The Open Source Community</strong> - Inspiration and support</li>
-</ul>
-<h2>Roadmap</h2>
-<p>Planned features:</p>
-<ul>
-<li>[ ] Twitch Support</li>
-<li>[ ] Instagram Support</li>
-<li>[ ] Batch Download</li>
-<li>[ ] Automatic Compression</li>
-<li>[ ] Cloud Integration</li>
-</ul>
-<h2>Resources</h2>
-<ul>
-<li><strong>GitHub</strong>: https://github.com/batsave/downloader-studio</li>
-<li><strong>Issues</strong>: https://github.com/batsave/downloader-studio/issues</li>
-<li><strong>Discussions</strong>: https://github.com/batsave/downloader-studio/discussions</li>
-<li><strong>License</strong>: <a href="../../LICENSE">MIT License</a></li>
-</ul>
-<h2>Disclaimer</h2>
-<p>Downloader Studio is provided &quot;as is&quot; without warranty.</p>
-<p>Users are responsible for respecting:</p>
-<ul>
-<li>Terms of service of websites</li>
-<li>Copyright and intellectual property rights</li>
-<li>Applicable local laws</li>
-</ul>
-<p>The application is intended for personal and educational use.</p>
-<hr>
-<p><strong>Thank you for choosing Downloader Studio!</strong> 🎉</p>
-<p>To contribute or report issues, visit: https://github.com/batsave/downloader-studio</p>
-            </article>
-        </main>
-    </div>
-</body>
+                <div>
+                    <p class="nav-label">Documentation</p>
+                    <nav class="nav-list">
+                        <a href="../index.html">Hub</a>
+                        <a href="../fr/index.html">Fran?ais</a>
+                        <a href="../en/index.html">English</a>
+                        <a href="../de/index.html">Deutsch</a>
+                        <a href="../es/index.html">Espa?ol</a>
+                    </nav>
+                </div>
+                <div class="sidebar-footer">
+                    Documentation v2.12<br />MIT License
+                </div>
+            </aside>
+            <main class="main">
+                <article class="article">
+                    <a class="back-link" href="../index.html"
+                        >? Documentation hub</a
+                    >
+                    <div class="article-header">
+                        <p class="eyebrow">Downloader Studio</p>
+                        <h1>📖 About - Downloader Studio</h1>
+                    </div>
+
+                    <h2>What is Downloader Studio?</h2>
+                    <p>
+                        <strong>Downloader Studio</strong> is a modern and
+                        professional desktop application for downloading media
+                        from multiple sources with complete multilingual support
+                        and customizable themes.
+                    </p>
+                    <h3>Current Version</h3>
+                    <ul>
+                        <li><strong>v2.12</strong> - Stable Release</li>
+                        <li><strong>License</strong>: MIT (Open Source)</li>
+                        <li><strong>Platform</strong>: Windows 10/11</li>
+                        <li><strong>Python</strong>: 3.8+</li>
+                    </ul>
+                    <h2>Main Features</h2>
+                    <h3>🎥 Multi-Source Downloads</h3>
+                    <ul>
+                        <li>YouTube</li>
+                        <li>SoundCloud</li>
+                        <li>And more coming soon...</li>
+                    </ul>
+                    <h3>🎵 Multiple Formats</h3>
+                    <p><strong>Video:</strong></p>
+                    <ul>
+                        <li>MP4 (Full HD 1080p)</li>
+                        <li>WebM</li>
+                    </ul>
+                    <p><strong>Audio:</strong></p>
+                    <ul>
+                        <li>MP3 (320kbps)</li>
+                        <li>WAV</li>
+                        <li>M4A</li>
+                    </ul>
+                    <h3>🌍 4 Supported Languages</h3>
+                    <ul>
+                        <li>🇫🇷 Français</li>
+                        <li>🇬🇧 English</li>
+                        <li>🇩🇪 Deutsch</li>
+                        <li>🇪🇸 Español</li>
+                    </ul>
+                    <h3>🎨 Customizable Themes</h3>
+                    <ul>
+                        <li>Dark Mode (default)</li>
+                        <li>Light Mode</li>
+                    </ul>
+                    <h3>📦 Usage Modes</h3>
+                    <ul>
+                        <li><strong>Normal Mode</strong> - Full interface</li>
+                        <li>
+                            <strong>Minimalist Mode</strong> - Compact window
+                            (Ctrl+M)
+                        </li>
+                    </ul>
+                    <h3>⚙️ Advanced Configuration</h3>
+                    <ul>
+                        <li>Output folder selection</li>
+                        <li>Default quality selection</li>
+                        <li>Enabled sources management</li>
+                    </ul>
+                    <h2>Architecture</h2>
+                    <p>The application is built with:</p>
+                    <ul>
+                        <li><strong>PyQt5</strong> - User interface</li>
+                        <li><strong>yt-dlp</strong> - Media downloading</li>
+                        <li>
+                            <strong>Python 3.8+</strong> - Programming language
+                        </li>
+                    </ul>
+                    <p>Modern structure:</p>
+                    <ul>
+                        <li>Clear separation of concerns</li>
+                        <li>Code organized into logical packages</li>
+                        <li>All imports using absolute paths</li>
+                        <li>Compatible with PyInstaller and Inno Setup</li>
+                    </ul>
+                    <h2>Project History</h2>
+                    <p>
+                        Downloader Studio was born from the need for a simple
+                        yet powerful application to download videos and music
+                        quickly and efficiently.
+                    </p>
+                    <p>
+                        The project has grown to become a professional solution
+                        with:
+                    </p>
+                    <ul>
+                        <li>Modern and clean interface</li>
+                        <li>Complete multilingual support</li>
+                        <li>Professional build pipeline</li>
+                        <li>Easy distribution to users</li>
+                    </ul>
+                    <h2>Team</h2>
+                    <ul>
+                        <li><strong>Development</strong>: BS Studio</li>
+                        <li><strong>License</strong>: MIT</li>
+                        <li>
+                            <strong>Contributors</strong>: Open Source Community
+                        </li>
+                    </ul>
+                    <h2>Vision</h2>
+                    <p>Our vision is to provide:</p>
+                    <p>
+                        ✓ <strong>Simplicity</strong> - Easy to use for everyone
+                        ✓ <strong>Power</strong> - Advanced features for
+                        experienced users ✓ <strong>Multilingual</strong> -
+                        Accessible in different languages ✓
+                        <strong>Open Source</strong> - Transparent and
+                        modifiable code ✓ <strong>Free</strong> - No hidden
+                        costs
+                    </p>
+                    <h2>Philosophy</h2>
+                    <p>
+                        Free and open source software is at the heart of
+                        Downloader Studio:
+                    </p>
+                    <ul>
+                        <li>Source code public on GitHub</li>
+                        <li>MIT License - free to use</li>
+                        <li>Community contributions welcome</li>
+                        <li>No ads or tracking</li>
+                    </ul>
+                    <h2>Acknowledgments</h2>
+                    <p>Thanks to:</p>
+                    <ul>
+                        <li><strong>PyQt5</strong> - Powerful UI framework</li>
+                        <li>
+                            <strong>yt-dlp</strong> - Excellent download engine
+                        </li>
+                        <li>
+                            <strong>The Open Source Community</strong> -
+                            Inspiration and support
+                        </li>
+                    </ul>
+                    <h2>Roadmap</h2>
+                    <p>Planned features:</p>
+                    <ul>
+                        <li>[ ] Twitch Support</li>
+                        <li>[ ] Instagram Support</li>
+                        <li>[ ] Batch Download</li>
+                        <li>[ ] Automatic Compression</li>
+                        <li>[ ] Cloud Integration</li>
+                    </ul>
+                    <h2>Resources</h2>
+                    <ul>
+                        <li>
+                            <strong>GitHub</strong>:
+                            https://github.com/batsave/downloader-studio
+                        </li>
+                        <li>
+                            <strong>Issues</strong>:
+                            https://github.com/batsave/downloader-studio/issues
+                        </li>
+                        <li>
+                            <strong>Discussions</strong>:
+                            https://github.com/batsave/downloader-studio/discussions
+                        </li>
+                        <li>
+                            <strong>License</strong>:
+                            <a href="../../LICENSE">MIT License</a>
+                        </li>
+                    </ul>
+                    <h2>Disclaimer</h2>
+                    <p>
+                        Downloader Studio is provided &quot;as is&quot; without
+                        warranty.
+                    </p>
+                    <p>Users are responsible for respecting:</p>
+                    <ul>
+                        <li>Terms of service of websites</li>
+                        <li>Copyright and intellectual property rights</li>
+                        <li>Applicable local laws</li>
+                    </ul>
+                    <p>
+                        The application is intended for personal and educational
+                        use.
+                    </p>
+                    <hr />
+                    <p>
+                        <strong
+                            >Thank you for choosing Downloader Studio!</strong
+                        >
+                        🎉
+                    </p>
+                    <p>
+                        To contribute or report issues, visit:
+                        https://github.com/batsave/downloader-studio
+                    </p>
+                </article>
+            </main>
+        </div>
+    </body>
 </html>

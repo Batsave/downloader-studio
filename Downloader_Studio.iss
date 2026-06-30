@@ -2,7 +2,7 @@
 ; Build first with build_exe.py to generate dist\DownloaderStudio.exe
 
 #define MyAppName "Downloader Studio"
-#define MyAppVersion "2.11"
+#define MyAppVersion "2.12"
 #define MyAppPublisher "BS Studio"
 #define MyAppExeName "DownloaderStudio.exe"
 #define MyAppURL "https://github.com/batsave/downloader-studio"

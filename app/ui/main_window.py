@@ -3,23 +3,24 @@ import os
 import logging
 import ctypes
 import json
+import requests
+import subprocess
+import tempfile
+import threading
 from pathlib import Path
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget,
-    QPushButton, QLabel, QSplashScreen, QProgressBar, QShortcut, QMessageBox
+    QPushButton, QLabel, QSplashScreen, QProgressBar, QShortcut, QMessageBox, QTextEdit, QScrollArea, QDialog
 )
 from PyQt5.QtCore import Qt, QSize, QTimer, QUrl
 from PyQt5.QtGui import QIcon, QPixmap, QPainter, QColor, QFont, QKeySequence, QDesktopServices
 import yt_dlp
-from config import DEFAULT_OUTPUT_DIR, LOG_FILE, SETTINGS_FILE
-
-Path(LOG_FILE).parent.mkdir(parents=True, exist_ok=True)
+from config import DEFAULT_OUTPUT_DIR, SETTINGS_FILE, APP_VERSION
 
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(LOG_FILE, encoding='utf-8'),
         logging.StreamHandler()
     ]
 )
@@ -653,7 +654,7 @@ class Downloader(QMainWindow):
             layout.addSpacing(8)
 
             # Footer section
-            self.credit_label = QLabel("BS Studio - V2.11")
+            self.credit_label = QLabel(f"BS Studio - V{APP_VERSION}")
             self.credit_label.setAlignment(Qt.AlignCenter)
             self.credit_label.setStyleSheet(f"font-size: 10px; color: {self.theme['muted']}; background: transparent;")
             layout.addWidget(self.credit_label)
@@ -873,20 +874,191 @@ class Downloader(QMainWindow):
         from i18n import t
         version = release.get("version", "")
         url = release.get("url") or release.get("release_url")
-        box = QMessageBox(self)
-        box.setWindowTitle(t("update_available"))
-        box.setText(t("update_available_body").format(version=version))
-        open_button = box.addButton(t("update_open"), QMessageBox.AcceptRole)
-        box.addButton(t("update_later"), QMessageBox.RejectRole)
-        box.exec_()
+        notes = release.get("notes", "")
 
-        if box.clickedButton() == open_button and url:
-            QDesktopServices.openUrl(QUrl(url))
+        dialog = QDialog(self)
+        dialog.setWindowTitle(t("update_available"))
+        dialog.setMinimumSize(600, 400)
+        layout = QVBoxLayout()
+
+        # Titre
+        title_label = QLabel(f"Version {version} disponible")
+        title_label.setStyleSheet(f"""
+            color: {self.theme['accent']};
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 10px;
+        """)
+        layout.addWidget(title_label)
+
+        # Notes de version
+        notes_text = QTextEdit()
+        notes_text.setMarkdown(notes) if notes else notes_text.setText("Aucune note")
+        notes_text.setReadOnly(True)
+        notes_text.setStyleSheet(f"""
+            QTextEdit {{
+                background: {self.theme['surface']};
+                color: {self.theme['text']};
+                border: 1px solid {self.theme['border']};
+                border-radius: 6px;
+                padding: 10px;
+                font-size: 11px;
+            }}
+            QScrollBar:vertical {{
+                background: {self.theme['panel']};
+                width: 10px;
+                border: none;
+                border-radius: 5px;
+            }}
+            QScrollBar::handle:vertical {{
+                background: {self.theme['panel_alt']};
+                border-radius: 5px;
+                min-height: 20px;
+                margin: 2px;
+            }}
+            QScrollBar::handle:vertical:hover {{
+                background: {self.theme['border']};
+            }}
+            QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
+                height: 0px;
+            }}
+            QScrollBar:horizontal {{
+                background: {self.theme['panel']};
+                height: 10px;
+                border: none;
+                border-radius: 5px;
+            }}
+            QScrollBar::handle:horizontal {{
+                background: {self.theme['panel_alt']};
+                border-radius: 5px;
+                min-width: 20px;
+                margin: 2px;
+            }}
+            QScrollBar::handle:horizontal:hover {{
+                background: {self.theme['border']};
+            }}
+            QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {{
+                width: 0px;
+            }}
+        """)
+        layout.addWidget(notes_text)
+
+        # Boutons
+        buttons_layout = QHBoxLayout()
+        buttons_layout.addStretch()
+
+        download_button = QPushButton(t("update_download"))
+        download_button.setStyleSheet(f"""
+            QPushButton {{
+                background: {self.theme['accent']};
+                color: {self.theme['accent_text']};
+                border: none;
+                border-radius: 6px;
+                padding: 10px 20px;
+                font-weight: 600;
+            }}
+            QPushButton:hover {{
+                background: {self.theme['accent_hover']};
+            }}
+        """)
+        buttons_layout.addWidget(download_button)
+
+        later_button = QPushButton(t("update_later"))
+        later_button.setStyleSheet(f"""
+            QPushButton {{
+                background: {self.theme['panel_alt']};
+                color: {self.theme['text']};
+                border: 1px solid {self.theme['border']};
+                border-radius: 6px;
+                padding: 10px 20px;
+                font-weight: 600;
+            }}
+            QPushButton:hover {{
+                background: {self.theme['panel']};
+            }}
+        """)
+        buttons_layout.addWidget(later_button)
+        layout.addLayout(buttons_layout)
+
+        dialog.setLayout(layout)
+        dialog.setStyleSheet(f"QDialog {{ background: {self.theme['bg']}; }}")
+
+        # Actions
+        def on_download():
+            dialog.close()
+            if url:
+                self.download_and_install_update(url)
+
+        download_button.clicked.connect(on_download)
+        later_button.clicked.connect(dialog.close)
+
+        dialog.exec_()
+
+    def download_and_install_update(self, url):
+        from i18n import t
+
+        def download_and_execute():
+            try:
+                response = requests.get(url, timeout=30, stream=True)
+                response.raise_for_status()
+
+                temp_dir = tempfile.gettempdir()
+                installer_path = os.path.join(temp_dir, "DownloaderStudio_Setup.exe")
+
+                with open(installer_path, 'wb') as f:
+                    for chunk in response.iter_content(chunk_size=8192):
+                        if chunk:
+                            f.write(chunk)
+
+                self.logs_page.add_log(t("update_download_complete"))
+
+                subprocess.Popen([installer_path, '/S'])
+                QApplication.quit()
+
+            except Exception as e:
+                logger.error(f"Update download failed: {e}")
+                self.logs_page.add_log(f"Erreur: {str(e)[:100]}")
+
+        self.logs_page.add_log(t("update_downloading"))
+        threading.Thread(target=download_and_execute, daemon=True).start()
 
     def on_no_update(self, show_message):
         if show_message and hasattr(self, "logs_page"):
             from i18n import t
-            self.logs_page.add_log(t("update_none"))
+            box = QMessageBox(self)
+            box.setWindowTitle(t("update_available"))
+            box.setText(t("update_up_to_date"))
+            box.addButton(t("update_later"), QMessageBox.AcceptRole)
+
+            t_obj = self.theme
+            box.setStyleSheet(f"""
+                QMessageBox {{
+                    background: {t_obj['bg']};
+                }}
+                QMessageBox QLabel {{
+                    color: {t_obj['text']};
+                    background: transparent;
+                }}
+                QMessageBox QDialog {{
+                    background: {t_obj['bg']};
+                }}
+                QPushButton {{
+                    background: {t_obj['accent']};
+                    color: {t_obj['accent_text']};
+                    border: none;
+                    border-radius: 6px;
+                    padding: 8px 16px;
+                    font-weight: 600;
+                    min-width: 80px;
+                }}
+                QPushButton:hover {{
+                    background: {t_obj['accent_hover']};
+                }}
+                QPushButton:pressed {{
+                    background: {t_obj['accent']};
+                }}
+            """)
+            box.exec_()
 
     def on_update_failed(self, error, show_message):
         if show_message and hasattr(self, "logs_page"):
@@ -1289,7 +1461,7 @@ def show_splash():
     painter.setPen(QColor("#888888"))
     meta_font = QFont("Segoe UI", 10)
     painter.setFont(meta_font)
-    painter.drawText(0, 240, pixmap.width(), 24, Qt.AlignCenter, "BS Studio - V2.11")
+    painter.drawText(0, 240, pixmap.width(), 24, Qt.AlignCenter, f"BS Studio - V{APP_VERSION}")
     painter.end()
 
     splash = QSplashScreen(pixmap)
