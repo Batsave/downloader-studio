@@ -25,22 +25,29 @@ Downloaded files are written to the user's Downloads folder by default: `%USERPR
 
 ## Documentation
 
-Open [docs/index.html](docs/index.html) in a browser for the visual documentation hub.
+Open the public documentation hub:
 
-GitHub Pages URL after deployment: `https://batsave.github.io/downloader-studio/`
+[https://batsave.github.io/downloader-studio/](https://batsave.github.io/downloader-studio/)
+
+You can also open [docs/index.html](docs/index.html) locally from the repository.
 
 For the first GitHub Pages setup, use:
 
 - Source: `Deploy from a branch`
-- Branch: `gh-pages`
-- Folder: `/ (root)`
+- Branch: `main`
+- Folder: `/docs`
+
+If GitHub shows an old `actions/configure-pages@v5` error, the repository is
+still configured for `GitHub Actions` Pages deployment or the page is showing an
+older failed run. This project serves the static documentation from `main/docs`,
+so the Pages source must be `Deploy from a branch`.
 
 HTML guides:
 
-- [French documentation](docs/fr/index.html)
-- [English documentation](docs/en/index.html)
-- [German documentation](docs/de/index.html)
-- [Spanish documentation](docs/es/index.html)
+- [French documentation](https://batsave.github.io/downloader-studio/fr/)
+- [English documentation](https://batsave.github.io/downloader-studio/en/)
+- [German documentation](https://batsave.github.io/downloader-studio/de/)
+- [Spanish documentation](https://batsave.github.io/downloader-studio/es/)
 
 ## Build
 

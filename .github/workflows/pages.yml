@@ -1,4 +1,4 @@
-name: Deploy documentation
+name: Publish documentation branch
 
 on:
   push:
@@ -52,5 +52,5 @@ jobs:
             exit 0
           fi
 
-          git commit -m "Deploy documentation"
+          git commit -m "Publish documentation"
           git push origin HEAD:gh-pages
