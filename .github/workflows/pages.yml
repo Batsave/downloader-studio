@@ -11,32 +11,46 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: pages
+  group: docs-pages
   cancel-in-progress: true
 
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
+      - name: Publish docs to gh-pages
+        shell: bash
+        run: |
+          set -euo pipefail
 
-      - name: Upload documentation
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs
+          tmp_dir="$(mktemp -d)"
+          cp -a docs/. "$tmp_dir/"
+          touch "$tmp_dir/.nojekyll"
 
-      - name: Deploy Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch origin gh-pages || true
+          if git ls-remote --exit-code --heads origin gh-pages >/dev/null 2>&1; then
+            git switch --track origin/gh-pages
+          else
+            git switch --orphan gh-pages
+          fi
+
+          find . -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+          cp -a "$tmp_dir/." .
+
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Documentation is already up to date."
+            exit 0
+          fi
+
+          git commit -m "Deploy documentation"
+          git push origin HEAD:gh-pages

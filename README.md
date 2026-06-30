@@ -29,6 +29,12 @@ Open [docs/index.html](docs/index.html) in a browser for the visual documentatio
 
 GitHub Pages URL after deployment: `https://batsave.github.io/downloader-studio/`
 
+For the first GitHub Pages setup, use:
+
+- Source: `Deploy from a branch`
+- Branch: `gh-pages`
+- Folder: `/ (root)`
+
 HTML guides:
 
 - [French documentation](docs/fr/index.html)
