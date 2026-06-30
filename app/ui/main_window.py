@@ -3,20 +3,23 @@ import os
 import logging
 import ctypes
 import json
+from pathlib import Path
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, QStackedWidget,
-    QPushButton, QLabel, QSplashScreen, QProgressBar, QShortcut
+    QPushButton, QLabel, QSplashScreen, QProgressBar, QShortcut, QMessageBox
 )
-from PyQt5.QtCore import Qt, QSize, QTimer
-from PyQt5.QtGui import QIcon, QPixmap, QPainter, QColor, QFont, QKeySequence
+from PyQt5.QtCore import Qt, QSize, QTimer, QUrl
+from PyQt5.QtGui import QIcon, QPixmap, QPainter, QColor, QFont, QKeySequence, QDesktopServices
 import yt_dlp
+from config import DEFAULT_OUTPUT_DIR, LOG_FILE, SETTINGS_FILE
 
-# Logging setup
+Path(LOG_FILE).parent.mkdir(parents=True, exist_ok=True)
+
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('downloader.log', encoding='utf-8'),
+        logging.FileHandler(LOG_FILE, encoding='utf-8'),
         logging.StreamHandler()
     ]
 )
@@ -28,9 +31,9 @@ from app.ui.pages.queue_page import QueuePage
 from app.ui.pages.settings_page import SettingsPage
 from app.ui.pages.logs_page import LogsPage
 from app.core.download_engine import DownloadEngine
+from app.core.update_checker import UpdateCheckThread
 from app.utils.icons import create_svg_icon, create_colored_svg_icon
 from app.utils.resources import resource_path
-from config import DEFAULT_OUTPUT_DIR
 
 logger.info("Application démarrée")
 
@@ -47,6 +50,10 @@ def get_nav_labels():
 
 
 def settings_path():
+    return SETTINGS_FILE
+
+
+def legacy_settings_path():
     return os.path.join(os.path.abspath("."), "downloader_settings.json")
 
 
@@ -212,6 +219,7 @@ class Downloader(QMainWindow):
         self.sidebar_expanded = True
         self.minimal_window = None
         self.is_minimal_mode = False
+        self.update_thread = None
 
         # Engine de téléchargement
         self.download_engine = DownloadEngine()
@@ -224,6 +232,7 @@ class Downloader(QMainWindow):
         # Logs
         from i18n import t
         self.logs_page.add_log(t("app_started"))
+        QTimer.singleShot(5000, self.check_for_updates_silent)
 
     def setup_ui(self):
         # Widget central avec layout
@@ -841,6 +850,52 @@ class Downloader(QMainWindow):
         self.stacked.setCurrentIndex(0)
         self.exit_minimal_mode()
 
+    def check_for_updates_silent(self):
+        self.check_for_updates(show_no_update=False)
+
+    def check_for_updates(self, show_no_update=True):
+        if self.update_thread and self.update_thread.isRunning():
+            return
+
+        from i18n import t
+        if show_no_update and hasattr(self, "logs_page"):
+            self.logs_page.add_log(t("checking_updates"))
+
+        self.update_thread = UpdateCheckThread()
+        self.update_thread.update_available.connect(self.on_update_available)
+        self.update_thread.no_update.connect(lambda: self.on_no_update(show_no_update))
+        self.update_thread.check_failed.connect(lambda error: self.on_update_failed(error, show_no_update))
+        self.update_thread.finished.connect(self.on_update_check_finished)
+        self.update_thread.finished.connect(self.update_thread.deleteLater)
+        self.update_thread.start()
+
+    def on_update_available(self, release):
+        from i18n import t
+        version = release.get("version", "")
+        url = release.get("url") or release.get("release_url")
+        box = QMessageBox(self)
+        box.setWindowTitle(t("update_available"))
+        box.setText(t("update_available_body").format(version=version))
+        open_button = box.addButton(t("update_open"), QMessageBox.AcceptRole)
+        box.addButton(t("update_later"), QMessageBox.RejectRole)
+        box.exec_()
+
+        if box.clickedButton() == open_button and url:
+            QDesktopServices.openUrl(QUrl(url))
+
+    def on_no_update(self, show_message):
+        if show_message and hasattr(self, "logs_page"):
+            from i18n import t
+            self.logs_page.add_log(t("update_none"))
+
+    def on_update_failed(self, error, show_message):
+        if show_message and hasattr(self, "logs_page"):
+            from i18n import t
+            self.logs_page.add_log(t("update_failed").format(error=error))
+
+    def on_update_check_finished(self):
+        self.update_thread = None
+
     def showEvent(self, event):
         super().showEvent(event)
         self.apply_title_bar_theme()
@@ -1137,8 +1192,12 @@ class Downloader(QMainWindow):
 
     def load_app_settings(self):
         path = settings_path()
+        legacy_path = legacy_settings_path()
         if not os.path.exists(path):
-            return
+            if os.path.exists(legacy_path):
+                path = legacy_path
+            else:
+                return
 
         try:
             with open(path, "r", encoding="utf-8") as file:
@@ -1193,6 +1252,7 @@ class Downloader(QMainWindow):
             "audio_quality": self.download_engine.audio_quality,
         }
         try:
+            Path(settings_path()).parent.mkdir(parents=True, exist_ok=True)
             with open(settings_path(), "w", encoding="utf-8") as file:
                 json.dump(data, file, ensure_ascii=False, indent=2)
         except Exception as exc:

@@ -60,14 +60,15 @@ def create_svg_icon(name):
 
 
 class SearchThread(QThread):
-    result_found = pyqtSignal(dict, str)
-    search_finished = pyqtSignal(str)
+    result_found = pyqtSignal(dict, str, int)
+    search_finished = pyqtSignal(str, int)
 
-    def __init__(self, engine, query, source):
+    def __init__(self, engine, query, source, search_id):
         super().__init__()
         self.engine = engine
         self.query = query
         self.source = source
+        self.search_id = search_id
 
     def run(self):
         try:
@@ -80,32 +81,33 @@ class SearchThread(QThread):
 
             for result in results:
                 if result:
-                    self.result_found.emit(result, self.source)
+                    self.result_found.emit(result, self.source, self.search_id)
 
-            self.search_finished.emit(self.source)
+            self.search_finished.emit(self.source, self.search_id)
         except Exception as exc:
             logger.error("Search thread error %s: %s", self.source, exc)
-            self.search_finished.emit(self.source)
+            self.search_finished.emit(self.source, self.search_id)
 
 
 class UrlExtractThread(QThread):
-    entries_found = pyqtSignal(list, str)
-    extract_finished = pyqtSignal(str)
+    entries_found = pyqtSignal(list, str, int)
+    extract_finished = pyqtSignal(str, int)
 
-    def __init__(self, engine, url):
+    def __init__(self, engine, url, search_id):
         super().__init__()
         self.engine = engine
         self.url = url
+        self.search_id = search_id
 
     def run(self):
         try:
             entries = self.engine.extract_playlist_entries(self.url)
-            self.entries_found.emit(entries, self.url)
+            self.entries_found.emit(entries, self.url, self.search_id)
         except Exception as exc:
             logger.error("URL extract thread error: %s", exc)
-            self.entries_found.emit([], self.url)
+            self.entries_found.emit([], self.url, self.search_id)
         finally:
-            self.extract_finished.emit(self.url)
+            self.extract_finished.emit(self.url, self.search_id)
 
 
 class SearchPage(QWidget):
@@ -120,6 +122,8 @@ class SearchPage(QWidget):
         self.selected_source = None
         self.search_threads = []
         self.url_extract_thread = None
+        self.active_search_id = 0
+        self.search_running = False
         self.download_worker = None
         self.direct_task = None
         self.preview_selected = False
@@ -503,6 +507,7 @@ class SearchPage(QWidget):
         return item
 
     def show_direct_url_result(self, url):
+        self.search_running = False
         self.selected_url = None
         self.preview_selected = False
         self.current_results = []
@@ -523,6 +528,13 @@ class SearchPage(QWidget):
         self.parent.logs_page.add_log(t("direct_url_ready"))
 
     def start_url_extraction(self, url):
+        if self.search_running:
+            self.parent.logs_page.add_log(t("search_already_running"))
+            return
+
+        self.search_running = True
+        self.active_search_id += 1
+        search_id = self.active_search_id
         self.selected_url = None
         self.selected_title = None
         self.selected_source = None
@@ -544,17 +556,17 @@ class SearchPage(QWidget):
         self.progress_label.setVisible(True)
         self.progress.setVisible(True)
 
-        if self.url_extract_thread and self.url_extract_thread.isRunning():
-            self.url_extract_thread.quit()
-            self.url_extract_thread.wait()
-
         self.parent.logs_page.add_log(t("analyzing_url_log").format(url=url))
-        self.url_extract_thread = UrlExtractThread(self.engine, url)
+        self.url_extract_thread = UrlExtractThread(self.engine, url, search_id)
         self.url_extract_thread.entries_found.connect(self.on_url_entries_found)
         self.url_extract_thread.extract_finished.connect(self.on_url_extract_finished)
+        self.url_extract_thread.finished.connect(self.url_extract_thread.deleteLater)
         self.url_extract_thread.start()
 
-    def on_url_entries_found(self, entries, url):
+    def on_url_entries_found(self, entries, url, search_id):
+        if search_id != self.active_search_id:
+            return
+
         if not entries:
             self.show_direct_url_result(url)
             return
@@ -585,7 +597,12 @@ class SearchPage(QWidget):
         self.download_btn.setEnabled(False)
         self.parent.logs_page.add_log(t("playlist_detected").format(count=count))
 
-    def on_url_extract_finished(self, url):
+    def on_url_extract_finished(self, url, search_id):
+        if search_id != self.active_search_id:
+            return
+
+        self.search_running = False
+        self.url_extract_thread = None
         self.search_btn.setEnabled(True)
         self.search_btn.setText(t("search_btn"))
         self.progress_label.setText(t("searching"))
@@ -602,6 +619,10 @@ class SearchPage(QWidget):
         self.bitrate_combo.parentWidget().setVisible(is_audio and fmt != "wav")
 
     def search(self):
+        if self.search_running:
+            self.parent.logs_page.add_log(t("search_already_running"))
+            return
+
         query = self.search_input.text().strip()
         if not query:
             self.parent.logs_page.add_log(t("empty_query"))
@@ -621,6 +642,9 @@ class SearchPage(QWidget):
             self.parent.logs_page.add_log(t("no_source_active"))
             return
 
+        self.search_running = True
+        self.active_search_id += 1
+        search_id = self.active_search_id
         self.selected_url = None
         self.preview_selected = False
         self.current_results = []
@@ -641,20 +665,18 @@ class SearchPage(QWidget):
         self.progress_label.setVisible(True)
         self.progress.setVisible(True)
 
-        for thread in self.search_threads:
-            if thread.isRunning():
-                thread.quit()
-                thread.wait()
-        self.search_threads.clear()
-
         for source in sources:
-            thread = SearchThread(self.engine, query, source)
+            thread = SearchThread(self.engine, query, source, search_id)
             thread.result_found.connect(self.on_result_found)
             thread.search_finished.connect(self.on_search_finished)
+            thread.finished.connect(thread.deleteLater)
             thread.start()
             self.search_threads.append(thread)
 
-    def on_result_found(self, result, source):
+    def on_result_found(self, result, source, search_id):
+        if search_id != self.active_search_id:
+            return
+
         title = result.get("title", t("untitled"))
         url = result.get("webpage_url") or result.get("url", "")
         duration = result.get("duration_string") or self._format_duration(result.get("duration"))
@@ -669,11 +691,16 @@ class SearchPage(QWidget):
 
         self.add_result_item(title, url, source, duration)
 
-    def on_search_finished(self, source):
+    def on_search_finished(self, source, search_id):
+        if search_id != self.active_search_id:
+            return
+
         self.pending_sources.discard(source)
         self.parent.logs_page.add_log(t("source_finished").format(source=source))
 
         if not self.pending_sources:
+            self.search_running = False
+            self.search_threads = []
             self.search_btn.setEnabled(True)
             self.search_btn.setText(t("search_btn"))
             self.progress_label.setVisible(False)

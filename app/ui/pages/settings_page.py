@@ -151,6 +151,10 @@ class SettingsPage(QWidget):
         layout.addWidget(self.language_combo)
         layout.addStretch()
 
+        self.update_btn = QPushButton(t("check_updates"))
+        self.update_btn.clicked.connect(self.check_updates)
+        layout.addWidget(self.update_btn)
+
         credit = QLabel("BS Studio - V2.11")
         credit.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         credit.setObjectName("settingsCredit")
@@ -330,8 +334,7 @@ class SettingsPage(QWidget):
             }}
         """)
 
-        # Style the browse button with primary color
-        self.browse_btn.setStyleSheet(f"""
+        button_style = f"""
             QPushButton {{
                 background: {t['accent']};
                 color: {t['accent_text']};
@@ -348,7 +351,9 @@ class SettingsPage(QWidget):
                 background: {t['disabled_bg']};
                 color: {t['disabled_text']};
             }}
-        """)
+        """
+        self.browse_btn.setStyleSheet(button_style)
+        self.update_btn.setStyleSheet(button_style)
 
     def update_theme(self):
         theme_name = self.theme_combo.currentData()
@@ -415,6 +420,10 @@ class SettingsPage(QWidget):
             self.notify_search_page()
             self.parent.save_app_settings()
 
+    def check_updates(self):
+        if hasattr(self.parent, "check_for_updates"):
+            self.parent.check_for_updates(show_no_update=True)
+
     def on_language_changed(self, language_code):
         """Handle language change - refresh UI texts"""
         self.refresh_ui_text()
@@ -437,4 +446,5 @@ class SettingsPage(QWidget):
         self.output_group.setTitle(t("output_folder"))
         self.output_hint.setText(t("all_files_note"))
         self.browse_btn.setText(t("change"))
+        self.update_btn.setText(t("check_updates"))
         self.update_summary()
