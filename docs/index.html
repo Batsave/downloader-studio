@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Downloader Studio - Documentation</title>
+    <style>
+        :root {
+            --bg: #09090b;
+            --surface: #0f0f12;
+            --panel: #18181b;
+            --panel-alt: #27272a;
+            --border: #3f3f46;
+            --text: #fafafa;
+            --muted: #a1a1aa;
+            --accent: #f59e0b;
+            --accent-hover: #d97706;
+            --accent-text: #18181b;
+            --ring: rgba(245, 158, 11, 0.35);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            background: var(--bg);
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text);
+            background: var(--bg);
+            font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.5;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .shell {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 260px minmax(0, 1fr);
+        }
+
+        .sidebar {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 24px 18px;
+            background: var(--panel);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 6px 18px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .brand img {
+            width: 42px;
+            height: 42px;
+            object-fit: contain;
+            flex: 0 0 auto;
+        }
+
+        .brand strong,
+        .brand span {
+            display: block;
+            line-height: 1.05;
+        }
+
+        .brand strong {
+            font-size: 13px;
+            letter-spacing: 0;
+        }
+
+        .brand span {
+            margin-top: 3px;
+            color: var(--accent);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .nav-label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .lang-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .lang-btn {
+            width: 100%;
+            border: 1px solid transparent;
+            border-left: 4px solid transparent;
+            border-radius: 0;
+            padding: 10px 12px;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            text-align: left;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .lang-btn:hover,
+        .lang-btn.active {
+            color: var(--text);
+            background: var(--panel-alt);
+            border-left-color: var(--accent);
+        }
+
+        .sidebar-footer {
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .main {
+            min-width: 0;
+            padding: 34px min(5vw, 56px) 48px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding-bottom: 22px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .eyebrow {
+            margin: 0 0 6px;
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(28px, 4vw, 46px);
+            line-height: 1.08;
+            letter-spacing: 0;
+        }
+
+        .intro {
+            max-width: 760px;
+            margin: 16px 0 0;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        .version {
+            flex: 0 0 auto;
+            display: inline-flex;
+            align-items: center;
+            min-height: 34px;
+            padding: 7px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--muted);
+            background: var(--surface);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .content {
+            display: none;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin: 24px 0;
+        }
+
+        .metric {
+            min-height: 92px;
+            padding: 16px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--surface);
+        }
+
+        .metric strong {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--accent);
+            font-size: 20px;
+            line-height: 1;
+        }
+
+        .metric span {
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 650;
+        }
+
+        .section-title {
+            margin: 34px 0 14px;
+            font-size: 18px;
+        }
+
+        .docs-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .doc-card {
+            display: grid;
+            gap: 8px;
+            min-height: 150px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--surface);
+            text-decoration: none;
+        }
+
+        .doc-card:hover,
+        .doc-card:focus-visible {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--ring);
+            outline: none;
+        }
+
+        .doc-card h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .doc-card p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .doc-card span {
+            align-self: end;
+            color: var(--accent);
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .workflow {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 1px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--border);
+        }
+
+        .step {
+            min-height: 112px;
+            padding: 16px;
+            background: var(--panel);
+        }
+
+        .step b {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--accent);
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+
+        .step p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .notes {
+            margin-top: 24px;
+            padding: 16px 18px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: var(--panel);
+            color: var(--muted);
+            font-size: 13px;
+        }
+
+        .notes code {
+            color: var(--text);
+        }
+
+        @media (max-width: 920px) {
+            .shell {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+                height: auto;
+            }
+
+            .quick-grid,
+            .workflow {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 620px) {
+            .main {
+                padding: 26px 18px 34px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .docs-grid,
+            .quick-grid,
+            .workflow {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <img src="../assets/downloader-studio-logo.png" alt="Downloader Studio">
+                <div>
+                    <strong>Downloader</strong>
+                    <span>Studio</span>
+                </div>
+            </div>
+
+            <div>
+                <p class="nav-label">Langue</p>
+                <div class="lang-list" aria-label="Language selector">
+                    <button class="lang-btn active" type="button" data-lang="fr">Français</button>
+                    <button class="lang-btn" type="button" data-lang="en">English</button>
+                    <button class="lang-btn" type="button" data-lang="de">Deutsch</button>
+                    <button class="lang-btn" type="button" data-lang="es">Español</button>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                Documentation v2.11<br>
+                MIT License
+            </div>
+        </aside>
+
+        <main class="main">
+            <section id="fr-content" class="content active" data-title="Downloader Studio - Documentation">
+                <div class="topbar">
+                    <div>
+                        <p class="eyebrow">Documentation officielle</p>
+                        <h1>Une base claire pour installer, utiliser et publier l'application.</h1>
+                        <p class="intro">Guides courts, liens valides et structure alignée sur l'interface desktop : sobre, lisible, orientée action.</p>
+                    </div>
+                    <span class="version">FR</span>
+                </div>
+
+                <div class="quick-grid">
+                    <div class="metric"><strong>4</strong><span>langues prises en charge</span></div>
+                    <div class="metric"><strong>4</strong><span>formats configurables</span></div>
+                    <div class="metric"><strong>2</strong><span>sources visibles dans l'UI</span></div>
+                    <div class="metric"><strong>2</strong><span>modes d'utilisation</span></div>
+                </div>
+
+                <h2 class="section-title">Guides</h2>
+                <div class="docs-grid">
+                    <a class="doc-card" href="fr/index.md"><h3>Sommaire</h3><p>Vue d'ensemble de la documentation française et liens principaux.</p><span>Ouvrir</span></a>
+                    <a class="doc-card" href="fr/demarrage-rapide.md"><h3>Démarrage rapide</h3><p>Installer, lancer, rechercher un média et configurer le dossier de sortie.</p><span>Lire</span></a>
+                    <a class="doc-card" href="fr/guide-construction.md"><h3>Guide de build</h3><p>Créer l'exécutable PyInstaller puis l'installateur Inno Setup.</p><span>Compiler</span></a>
+                    <a class="doc-card" href="fr/architecture.md"><h3>Architecture</h3><p>Comprendre les modules PyQt, le moteur de téléchargement et les traductions.</p><span>Explorer</span></a>
+                    <a class="doc-card" href="fr/about.md"><h3>À propos</h3><p>Fonctionnalités, philosophie du projet et limites d'utilisation.</p><span>Découvrir</span></a>
+                </div>
+
+                <h2 class="section-title">Flux recommandé</h2>
+                <div class="workflow">
+                    <div class="step"><b>1. Installer</b><p>Utiliser l'installateur Windows ou lancer `python main.py` en développement.</p></div>
+                    <div class="step"><b>2. Configurer</b><p>Choisir langue, thème, formats, qualité et dossier de sortie.</p></div>
+                    <div class="step"><b>3. Télécharger</b><p>Rechercher ou coller une URL, puis ajouter à la file ou télécharger directement.</p></div>
+                    <div class="step"><b>4. Publier</b><p>Construire `DownloaderStudio.exe`, compiler le `.iss`, tester l'installateur.</p></div>
+                </div>
+
+                <p class="notes">Par défaut, les fichiers sont écrits dans <code>%USERPROFILE%\Downloads</code>. Le fichier local <code>downloader_settings.json</code> est ignoré par Git.</p>
+            </section>
+
+            <section id="en-content" class="content" data-title="Downloader Studio - Documentation">
+                <div class="topbar">
+                    <div>
+                        <p class="eyebrow">Official documentation</p>
+                        <h1>A clean base to install, use, build, and publish the app.</h1>
+                        <p class="intro">Short guides, valid links, and a sober layout aligned with the desktop interface.</p>
+                    </div>
+                    <span class="version">EN</span>
+                </div>
+
+                <div class="quick-grid">
+                    <div class="metric"><strong>4</strong><span>supported languages</span></div>
+                    <div class="metric"><strong>4</strong><span>configurable formats</span></div>
+                    <div class="metric"><strong>2</strong><span>visible UI sources</span></div>
+                    <div class="metric"><strong>2</strong><span>usage modes</span></div>
+                </div>
+
+                <h2 class="section-title">Guides</h2>
+                <div class="docs-grid">
+                    <a class="doc-card" href="en/index.md"><h3>Overview</h3><p>English documentation index and main links.</p><span>Open</span></a>
+                    <a class="doc-card" href="en/quick-start.md"><h3>Quick start</h3><p>Install, launch, search media, and configure the output folder.</p><span>Read</span></a>
+                    <a class="doc-card" href="en/build-guide.md"><h3>Build guide</h3><p>Create the PyInstaller executable and the Inno Setup installer.</p><span>Build</span></a>
+                    <a class="doc-card" href="en/architecture.md"><h3>Architecture</h3><p>Understand the PyQt modules, download engine, and translations.</p><span>Explore</span></a>
+                    <a class="doc-card" href="en/about.md"><h3>About</h3><p>Features, project philosophy, and usage limits.</p><span>Discover</span></a>
+                </div>
+
+                <h2 class="section-title">Recommended Flow</h2>
+                <div class="workflow">
+                    <div class="step"><b>1. Install</b><p>Use the Windows installer or run `python main.py` in development.</p></div>
+                    <div class="step"><b>2. Configure</b><p>Choose language, theme, formats, quality, and output folder.</p></div>
+                    <div class="step"><b>3. Download</b><p>Search or paste a URL, then queue it or download immediately.</p></div>
+                    <div class="step"><b>4. Release</b><p>Build `DownloaderStudio.exe`, compile the `.iss`, test the installer.</p></div>
+                </div>
+
+                <p class="notes">By default, files are written to <code>%USERPROFILE%\Downloads</code>. The local <code>downloader_settings.json</code> file is ignored by Git.</p>
+            </section>
+
+            <section id="de-content" class="content" data-title="Downloader Studio - Dokumentation">
+                <div class="topbar">
+                    <div>
+                        <p class="eyebrow">Offizielle Dokumentation</p>
+                        <h1>Eine klare Basis zum Installieren, Nutzen, Bauen und Veröffentlichen.</h1>
+                        <p class="intro">Kurze Anleitungen, gültige Links und ein ruhiges Layout passend zur Desktop-Oberfläche.</p>
+                    </div>
+                    <span class="version">DE</span>
+                </div>
+
+                <div class="quick-grid">
+                    <div class="metric"><strong>4</strong><span>unterstützte Sprachen</span></div>
+                    <div class="metric"><strong>4</strong><span>konfigurierbare Formate</span></div>
+                    <div class="metric"><strong>2</strong><span>sichtbare Quellen</span></div>
+                    <div class="metric"><strong>2</strong><span>Nutzungsmodi</span></div>
+                </div>
+
+                <h2 class="section-title">Anleitungen</h2>
+                <div class="docs-grid">
+                    <a class="doc-card" href="de/index.md"><h3>Übersicht</h3><p>Deutscher Dokumentationsindex und Hauptlinks.</p><span>Öffnen</span></a>
+                    <a class="doc-card" href="de/quick-start.md"><h3>Schnelleinstieg</h3><p>Installieren, starten, Medien suchen und Ausgabeordner konfigurieren.</p><span>Lesen</span></a>
+                    <a class="doc-card" href="de/build-guide.md"><h3>Build-Anleitung</h3><p>PyInstaller-EXE und Inno-Setup-Installer erstellen.</p><span>Bauen</span></a>
+                    <a class="doc-card" href="de/architecture.md"><h3>Architektur</h3><p>PyQt-Module, Download-Engine und Übersetzungen verstehen.</p><span>Erkunden</span></a>
+                    <a class="doc-card" href="de/about.md"><h3>Über</h3><p>Funktionen, Projektphilosophie und Nutzungsgrenzen.</p><span>Lesen</span></a>
+                </div>
+
+                <h2 class="section-title">Empfohlener Ablauf</h2>
+                <div class="workflow">
+                    <div class="step"><b>1. Installieren</b><p>Windows-Installer nutzen oder in der Entwicklung `python main.py` starten.</p></div>
+                    <div class="step"><b>2. Konfigurieren</b><p>Sprache, Design, Formate, Qualität und Ausgabeordner wählen.</p></div>
+                    <div class="step"><b>3. Herunterladen</b><p>Suchen oder URL einfügen, dann in die Warteschlange legen oder direkt laden.</p></div>
+                    <div class="step"><b>4. Veröffentlichen</b><p>`DownloaderStudio.exe` bauen, `.iss` kompilieren, Installer testen.</p></div>
+                </div>
+
+                <p class="notes">Standardmäßig werden Dateien in <code>%USERPROFILE%\Downloads</code> geschrieben. <code>downloader_settings.json</code> wird von Git ignoriert.</p>
+            </section>
+
+            <section id="es-content" class="content" data-title="Downloader Studio - Documentación">
+                <div class="topbar">
+                    <div>
+                        <p class="eyebrow">Documentación oficial</p>
+                        <h1>Una base clara para instalar, usar, compilar y publicar la app.</h1>
+                        <p class="intro">Guías cortas, enlaces válidos y un diseño sobrio alineado con la interfaz de escritorio.</p>
+                    </div>
+                    <span class="version">ES</span>
+                </div>
+
+                <div class="quick-grid">
+                    <div class="metric"><strong>4</strong><span>idiomas compatibles</span></div>
+                    <div class="metric"><strong>4</strong><span>formatos configurables</span></div>
+                    <div class="metric"><strong>2</strong><span>fuentes visibles</span></div>
+                    <div class="metric"><strong>2</strong><span>modos de uso</span></div>
+                </div>
+
+                <h2 class="section-title">Guías</h2>
+                <div class="docs-grid">
+                    <a class="doc-card" href="es/index.md"><h3>Resumen</h3><p>Índice de documentación en español y enlaces principales.</p><span>Abrir</span></a>
+                    <a class="doc-card" href="es/quick-start.md"><h3>Inicio rápido</h3><p>Instalar, iniciar, buscar medios y configurar la carpeta de salida.</p><span>Leer</span></a>
+                    <a class="doc-card" href="es/build-guide.md"><h3>Guía de compilación</h3><p>Crear el ejecutable PyInstaller y el instalador Inno Setup.</p><span>Compilar</span></a>
+                    <a class="doc-card" href="es/architecture.md"><h3>Arquitectura</h3><p>Comprender los módulos PyQt, el motor de descarga y las traducciones.</p><span>Explorar</span></a>
+                    <a class="doc-card" href="es/about.md"><h3>Acerca de</h3><p>Funciones, filosofía del proyecto y límites de uso.</p><span>Descubrir</span></a>
+                </div>
+
+                <h2 class="section-title">Flujo recomendado</h2>
+                <div class="workflow">
+                    <div class="step"><b>1. Instalar</b><p>Usar el instalador de Windows o ejecutar `python main.py` en desarrollo.</p></div>
+                    <div class="step"><b>2. Configurar</b><p>Elegir idioma, tema, formatos, calidad y carpeta de salida.</p></div>
+                    <div class="step"><b>3. Descargar</b><p>Buscar o pegar una URL, luego agregar a la cola o descargar directamente.</p></div>
+                    <div class="step"><b>4. Publicar</b><p>Compilar `DownloaderStudio.exe`, compilar el `.iss`, probar el instalador.</p></div>
+                </div>
+
+                <p class="notes">Por defecto, los archivos se escriben en <code>%USERPROFILE%\Downloads</code>. Git ignora el archivo local <code>downloader_settings.json</code>.</p>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const buttons = document.querySelectorAll(".lang-btn");
+        const sections = document.querySelectorAll(".content");
+
+        function switchLanguage(lang) {
+            sections.forEach((section) => {
+                section.classList.toggle("active", section.id === `${lang}-content`);
+                if (section.id === `${lang}-content`) {
+                    document.documentElement.lang = lang;
+                    document.title = section.dataset.title || "Downloader Studio - Documentation";
+                }
+            });
+
+            buttons.forEach((button) => {
+                button.classList.toggle("active", button.dataset.lang === lang);
+            });
+        }
+
+        buttons.forEach((button) => {
+            button.addEventListener("click", () => switchLanguage(button.dataset.lang));
+        });
+    </script>
+</body>
+</html>
+

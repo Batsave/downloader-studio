@@ -1,0 +1,673 @@
+"""
+Localization system for Downloader Studio
+Supports: French, English, German, Spanish
+"""
+
+TRANSLATIONS = {
+    "fr": {
+        # Navigation
+        "search": "Recherche",
+        "queue": "File d'attente",
+        "settings": "Paramètres",
+        "logs": "Logs",
+        "minimal_mode": "Mode minimaliste",
+
+        # Buttons
+        "download": "Télécharger",
+        "search_btn": "Chercher",
+        "select_all": "Tout sélectionner",
+        "remove": "Retirer",
+        "clear_queue": "Vider l'attente",
+        "change": "Changer",
+        "clear": "Effacer",
+        "export": "Exporter",
+        "collapse": "Rétracter",
+        "expand": "Étendre",
+
+        # Settings
+        "appearance": "Apparence",
+        "theme": "Thème",
+        "dark": "Sombre",
+        "light": "Clair",
+        "sources": "Sources",
+        "used_in_search": "Utilisées dans la recherche.",
+        "formats": "Formats",
+        "available_in_search": "Disponibles dans la page Recherche.",
+        "quality": "Qualité par défaut",
+        "video": "Vidéo",
+        "audio": "Audio",
+        "default_values_note": "Ces valeurs préremplissent les nouveaux téléchargements.",
+        "output_folder": "Dossier de sortie",
+        "all_files_note": "Tous les fichiers téléchargés seront écrits dans ce dossier.",
+
+        # Minimal mode
+        "drag_or_paste": "Glissez une URL ou collez-la ici...",
+        "back_to_desktop": "Revenir au mode Desktop",
+
+        # Progress
+        "download_progress": "Téléchargement",
+        "no_download": "Aucun téléchargement en attente.",
+
+        # Queue
+        "start_queue": "Lancer la file",
+        "queue_empty": "Aucun téléchargement en attente.",
+        "launch_search_then_add": "Lance une recherche puis ajoute un résultat à la file.",
+
+        # Search page
+        "results": "Résultats",
+        "details": "Détails",
+        "add_to_queue": "Mettre en attente",
+        "download_now": "Télécharger maintenant",
+        "search_placeholder": "Chercher un titre, un artiste ou coller une URL",
+        "format_label": "Format",
+        "audio_bitrate_label": "Bitrate audio",
+        "no_search": "Aucune recherche lancée.",
+        "select_result": "Sélectionne un résultat pour préparer le téléchargement.",
+
+        # Queue page
+        "running": "En cours",
+        "pending": "En attente",
+        "history": "Historique",
+
+        # Settings page
+        "language": "Langue",
+        "select_folder": "Choisir le dossier",
+        "choose_folder": "Choisir le dossier",
+
+        # Buttons
+        "clear_logs": "Effacer",
+        "export_logs": "Exporter",
+        "add_to_queue_btn": "Mettre en attente",
+
+        # General
+        "youtube": "YouTube",
+        "soundcloud": "SoundCloud",
+        "bs_studio": "BS Studio",
+        "video_quality_label": "Qualité vidéo",
+        "searching": "Recherche en cours...",
+        "searching_short": "Recherche...",
+        "analyzing": "Analyse...",
+        "analyzing_url": "Analyse de l'URL...",
+        "analyzing_url_results": "Analyse de l'URL en cours...",
+        "detecting_playlist": "Analyse de l'URL pour détecter une playlist.",
+        "no_result_found": "Aucun résultat trouvé.",
+        "empty_query": "Requête vide",
+        "no_source_active": "Aucune source active",
+        "direct_url_ready": "URL directe prête",
+        "direct_link": "Lien direct",
+        "link": "Lien",
+        "untitled": "Sans titre",
+        "title_label": "Titre",
+        "source_label": "Source",
+        "duration_label": "Durée",
+        "selected_tracks": "{count} titre(s) sélectionné(s)",
+        "to_add": "À ajouter",
+        "already_in_queue": "Déjà dans la file",
+        "already_downloading": "Déjà en téléchargement",
+        "selection_already_queued": "La sélection est déjà dans la file d'attente.",
+        "result_already_queued": "Ce résultat est déjà dans la file d'attente.",
+        "result_already_downloading": "Ce résultat est déjà en téléchargement.",
+        "select_result_before_queue": "Sélectionne un résultat avant de l'ajouter à la file.",
+        "add_selected_to_queue": "Ajoute le résultat sélectionné à la file d'attente.",
+        "add_all_selected_to_queue": "Ajoute tous les résultats sélectionnés à la file d'attente.",
+        "add_remaining_to_queue": "Ajoute uniquement les titres pas encore présents dans la file.",
+        "add_count_to_queue": "Ajouter {count} à la file",
+        "add_count_remaining": "Ajouter {count} restant(s)",
+        "in_queue": "Dans la file",
+        "playlist_loaded": "{count} titre(s) listé(s) depuis: {title}",
+        "select_multiple_for_queue": "Sélectionne un ou plusieurs titres pour les ajouter à la file d'attente.",
+        "output_folder_path": "Dossier de sortie: {path}",
+        "no_current_download": "Aucun téléchargement en cours.",
+        "queue_info_running": "1 en cours, {pending} en attente",
+        "queue_info_pending": "{pending} tâche(s) en attente",
+        "error": "Erreur",
+        "queue_started": "File lancée",
+        "queue_is_empty": "File vide",
+        "queue_cleared": "File vidée",
+        "log_entries": "{count} entrée(s)",
+        "export_logs_title": "Exporter logs",
+        "logs_exported": "Logs exportés: {path}",
+        "theme_changed": "Thème: {theme}",
+        "language_changed": "Langue changée en: {language}",
+        "enabled": "activé",
+        "disabled": "désactivé",
+        "source_status": "{source}: {status}",
+        "format_status": "{format}: {status}",
+        "one_format_required": "Au moins un format doit rester actif",
+        "video_quality_changed": "Qualité vidéo: {quality}",
+        "audio_quality_changed": "Qualité audio: {quality}",
+        "folder_changed": "Dossier: {path}",
+        "collapse_sidebar": "Rétracter la sidebar",
+        "expand_sidebar": "Étendre la sidebar",
+        "playlist_detected": "Playlist détectée: {count} titre(s)",
+        "search_log": "Recherche: {query}",
+        "source_finished": "{source}: terminé",
+        "no_result_selected": "Aucun résultat sélectionné",
+        "added_one_to_queue_log": "1 titre ajouté à la file",
+        "added_count_to_queue_log": "{count} titres ajoutés à la file",
+        "select_one_for_download_now": "Sélectionne un seul résultat pour télécharger maintenant",
+        "direct_download_already_running": "Téléchargement direct déjà en cours",
+        "download_log": "Téléchargement: {title} ({format})",
+        "added_to_queue_log": "Ajouté à la file: {title} ({format})",
+        "app_started": "App démarrée",
+        "finished_log": "Terminé: {title}",
+        "added_log": "Ajouté: {title}",
+        "queue_finished": "File terminée",
+        "next_task": "Passage à la tâche suivante...",
+        "all_downloads_finished": "Tous les téléchargements sont terminés",
+        "settings_summary": "{count} source(s) | {formats}",
+        "analyzing_url_log": "Analyse URL: {url}",
+    },
+    "en": {
+        # Navigation
+        "search": "Search",
+        "queue": "Queue",
+        "settings": "Settings",
+        "logs": "Logs",
+        "minimal_mode": "Minimal Mode",
+
+        # Buttons
+        "download": "Download",
+        "search_btn": "Search",
+        "select_all": "Select All",
+        "remove": "Remove",
+        "clear_queue": "Clear Queue",
+        "change": "Change",
+        "clear": "Clear",
+        "export": "Export",
+        "collapse": "Collapse",
+        "expand": "Expand",
+
+        # Settings
+        "appearance": "Appearance",
+        "theme": "Theme",
+        "dark": "Dark",
+        "light": "Light",
+        "sources": "Sources",
+        "used_in_search": "Used in search.",
+        "formats": "Formats",
+        "available_in_search": "Available in Search page.",
+        "quality": "Default Quality",
+        "video": "Video",
+        "audio": "Audio",
+        "default_values_note": "These values pre-fill new downloads.",
+        "output_folder": "Output Folder",
+        "all_files_note": "All downloaded files will be written to this folder.",
+
+        # Minimal mode
+        "drag_or_paste": "Drag a URL or paste it here...",
+        "back_to_desktop": "Back to Desktop Mode",
+
+        # Progress
+        "download_progress": "Download",
+        "no_download": "No downloads pending.",
+
+        # Queue
+        "start_queue": "Start Queue",
+        "queue_empty": "No downloads pending.",
+        "launch_search_then_add": "Launch a search then add a result to the queue.",
+
+        # Search page
+        "results": "Results",
+        "details": "Details",
+        "add_to_queue": "Add to Queue",
+        "download_now": "Download Now",
+        "search_placeholder": "Search for a title, artist or paste a URL",
+        "format_label": "Format",
+        "audio_bitrate_label": "Audio Bitrate",
+        "no_search": "No search launched.",
+        "select_result": "Select a result to prepare the download.",
+
+        # Queue page
+        "running": "Running",
+        "pending": "Pending",
+        "history": "History",
+
+        # Settings page
+        "language": "Language",
+        "select_folder": "Choose folder",
+        "choose_folder": "Choose folder",
+
+        # Buttons
+        "clear_logs": "Clear",
+        "export_logs": "Export",
+        "add_to_queue_btn": "Add to Queue",
+
+        # General
+        "youtube": "YouTube",
+        "soundcloud": "SoundCloud",
+        "bs_studio": "BS Studio",
+        "video_quality_label": "Video Quality",
+        "searching": "Searching...",
+        "searching_short": "Searching...",
+        "analyzing": "Analyzing...",
+        "analyzing_url": "Analyzing URL...",
+        "analyzing_url_results": "Analyzing URL...",
+        "detecting_playlist": "Analyzing the URL to detect a playlist.",
+        "no_result_found": "No result found.",
+        "empty_query": "Empty query",
+        "no_source_active": "No active source",
+        "direct_url_ready": "Direct URL ready",
+        "direct_link": "Direct link",
+        "link": "Link",
+        "untitled": "Untitled",
+        "title_label": "Title",
+        "source_label": "Source",
+        "duration_label": "Duration",
+        "selected_tracks": "{count} selected track(s)",
+        "to_add": "To add",
+        "already_in_queue": "Already in queue",
+        "already_downloading": "Already downloading",
+        "selection_already_queued": "The selection is already in the queue.",
+        "result_already_queued": "This result is already in the queue.",
+        "result_already_downloading": "This result is already downloading.",
+        "select_result_before_queue": "Select a result before adding it to the queue.",
+        "add_selected_to_queue": "Add the selected result to the queue.",
+        "add_all_selected_to_queue": "Add all selected results to the queue.",
+        "add_remaining_to_queue": "Add only titles that are not already in the queue.",
+        "add_count_to_queue": "Add {count} to queue",
+        "add_count_remaining": "Add {count} remaining",
+        "in_queue": "In queue",
+        "playlist_loaded": "{count} track(s) listed from: {title}",
+        "select_multiple_for_queue": "Select one or more tracks to add them to the queue.",
+        "output_folder_path": "Output folder: {path}",
+        "no_current_download": "No download running.",
+        "queue_info_running": "1 running, {pending} pending",
+        "queue_info_pending": "{pending} pending task(s)",
+        "error": "Error",
+        "queue_started": "Queue started",
+        "queue_is_empty": "Queue empty",
+        "queue_cleared": "Queue cleared",
+        "log_entries": "{count} entry(s)",
+        "export_logs_title": "Export logs",
+        "logs_exported": "Logs exported: {path}",
+        "theme_changed": "Theme: {theme}",
+        "language_changed": "Language changed to: {language}",
+        "enabled": "enabled",
+        "disabled": "disabled",
+        "source_status": "{source}: {status}",
+        "format_status": "{format}: {status}",
+        "one_format_required": "At least one format must remain active",
+        "video_quality_changed": "Video quality: {quality}",
+        "audio_quality_changed": "Audio quality: {quality}",
+        "folder_changed": "Folder: {path}",
+        "collapse_sidebar": "Collapse sidebar",
+        "expand_sidebar": "Expand sidebar",
+        "playlist_detected": "Playlist detected: {count} track(s)",
+        "search_log": "Search: {query}",
+        "source_finished": "{source}: finished",
+        "no_result_selected": "No result selected",
+        "added_one_to_queue_log": "1 track added to the queue",
+        "added_count_to_queue_log": "{count} tracks added to the queue",
+        "select_one_for_download_now": "Select one result to download now",
+        "direct_download_already_running": "Direct download already running",
+        "download_log": "Download: {title} ({format})",
+        "added_to_queue_log": "Added to queue: {title} ({format})",
+        "app_started": "App started",
+        "finished_log": "Finished: {title}",
+        "added_log": "Added: {title}",
+        "queue_finished": "Queue finished",
+        "next_task": "Moving to the next task...",
+        "all_downloads_finished": "All downloads are finished",
+        "settings_summary": "{count} source(s) | {formats}",
+        "analyzing_url_log": "URL analysis: {url}",
+    },
+    "de": {
+        # Navigation
+        "search": "Suche",
+        "queue": "Warteschlange",
+        "settings": "Einstellungen",
+        "logs": "Logs",
+        "minimal_mode": "Minimalistischer Modus",
+
+        # Buttons
+        "download": "Herunterladen",
+        "search_btn": "Suchen",
+        "select_all": "Alles auswählen",
+        "remove": "Entfernen",
+        "clear_queue": "Warteschlange leeren",
+        "change": "Ändern",
+        "clear": "Löschen",
+        "export": "Exportieren",
+        "collapse": "Einklappen",
+        "expand": "Ausklappen",
+
+        # Settings
+        "appearance": "Erscheinungsbild",
+        "theme": "Design",
+        "dark": "Dunkel",
+        "light": "Hell",
+        "sources": "Quellen",
+        "used_in_search": "In Suche verwendet.",
+        "formats": "Formate",
+        "available_in_search": "Verfügbar auf der Suchseite.",
+        "quality": "Standardqualität",
+        "video": "Video",
+        "audio": "Audio",
+        "default_values_note": "Diese Werte vorausfüllen neue Downloads.",
+        "output_folder": "Ausgabeordner",
+        "all_files_note": "Alle heruntergeladenen Dateien werden in diesen Ordner geschrieben.",
+
+        # Minimal mode
+        "drag_or_paste": "Ziehen Sie eine URL oder fügen Sie sie hier ein...",
+        "back_to_desktop": "Zurück zum Desktop-Modus",
+
+        # Progress
+        "download_progress": "Download",
+        "no_download": "Keine Downloads ausstehend.",
+
+        # Queue
+        "start_queue": "Warteschlange starten",
+        "queue_empty": "Keine Downloads ausstehend.",
+        "launch_search_then_add": "Starten Sie eine Suche und fügen Sie ein Ergebnis zur Warteschlange hinzu.",
+
+        # Search page
+        "results": "Ergebnisse",
+        "details": "Details",
+        "add_to_queue": "Zur Warteschlange hinzufügen",
+        "download_now": "Jetzt herunterladen",
+        "search_placeholder": "Nach Titel, Künstler suchen oder URL einfügen",
+        "format_label": "Format",
+        "audio_bitrate_label": "Audio-Bitrate",
+        "no_search": "Keine Suche gestartet.",
+        "select_result": "Wählen Sie ein Ergebnis aus, um den Download vorzubereiten.",
+
+        # Queue page
+        "running": "Läuft",
+        "pending": "Ausstehend",
+        "history": "Verlauf",
+
+        # Settings page
+        "language": "Sprache",
+        "select_folder": "Ordner wählen",
+        "choose_folder": "Ordner wählen",
+
+        # Buttons
+        "clear_logs": "Löschen",
+        "export_logs": "Exportieren",
+        "add_to_queue_btn": "Zur Warteschlange hinzufügen",
+
+        # General
+        "youtube": "YouTube",
+        "soundcloud": "SoundCloud",
+        "bs_studio": "BS Studio",
+        "video_quality_label": "Videoqualität",
+        "searching": "Suche läuft...",
+        "searching_short": "Suche...",
+        "analyzing": "Analyse...",
+        "analyzing_url": "URL wird analysiert...",
+        "analyzing_url_results": "URL wird analysiert...",
+        "detecting_playlist": "URL wird analysiert, um eine Playlist zu erkennen.",
+        "no_result_found": "Kein Ergebnis gefunden.",
+        "empty_query": "Leere Suchanfrage",
+        "no_source_active": "Keine aktive Quelle",
+        "direct_url_ready": "Direkte URL bereit",
+        "direct_link": "Direkter Link",
+        "link": "Link",
+        "untitled": "Ohne Titel",
+        "title_label": "Titel",
+        "source_label": "Quelle",
+        "duration_label": "Dauer",
+        "selected_tracks": "{count} ausgewählte Titel",
+        "to_add": "Hinzuzufügen",
+        "already_in_queue": "Bereits in der Warteschlange",
+        "already_downloading": "Wird bereits heruntergeladen",
+        "selection_already_queued": "Die Auswahl ist bereits in der Warteschlange.",
+        "result_already_queued": "Dieses Ergebnis ist bereits in der Warteschlange.",
+        "result_already_downloading": "Dieses Ergebnis wird bereits heruntergeladen.",
+        "select_result_before_queue": "Wählen Sie ein Ergebnis aus, bevor Sie es zur Warteschlange hinzufügen.",
+        "add_selected_to_queue": "Fügt das ausgewählte Ergebnis zur Warteschlange hinzu.",
+        "add_all_selected_to_queue": "Fügt alle ausgewählten Ergebnisse zur Warteschlange hinzu.",
+        "add_remaining_to_queue": "Fügt nur Titel hinzu, die noch nicht in der Warteschlange sind.",
+        "add_count_to_queue": "{count} zur Warteschlange hinzufügen",
+        "add_count_remaining": "{count} verbleibende hinzufügen",
+        "in_queue": "In der Warteschlange",
+        "playlist_loaded": "{count} Titel gelistet aus: {title}",
+        "select_multiple_for_queue": "Wählen Sie einen oder mehrere Titel aus, um sie zur Warteschlange hinzuzufügen.",
+        "output_folder_path": "Ausgabeordner: {path}",
+        "no_current_download": "Kein Download läuft.",
+        "queue_info_running": "1 läuft, {pending} ausstehend",
+        "queue_info_pending": "{pending} ausstehende Aufgabe(n)",
+        "error": "Fehler",
+        "queue_started": "Warteschlange gestartet",
+        "queue_is_empty": "Warteschlange leer",
+        "queue_cleared": "Warteschlange geleert",
+        "log_entries": "{count} Eintrag/Einträge",
+        "export_logs_title": "Logs exportieren",
+        "logs_exported": "Logs exportiert: {path}",
+        "theme_changed": "Design: {theme}",
+        "language_changed": "Sprache geändert zu: {language}",
+        "enabled": "aktiviert",
+        "disabled": "deaktiviert",
+        "source_status": "{source}: {status}",
+        "format_status": "{format}: {status}",
+        "one_format_required": "Mindestens ein Format muss aktiv bleiben",
+        "video_quality_changed": "Videoqualität: {quality}",
+        "audio_quality_changed": "Audioqualität: {quality}",
+        "folder_changed": "Ordner: {path}",
+        "collapse_sidebar": "Sidebar einklappen",
+        "expand_sidebar": "Sidebar ausklappen",
+        "playlist_detected": "Playlist erkannt: {count} Titel",
+        "search_log": "Suche: {query}",
+        "source_finished": "{source}: beendet",
+        "no_result_selected": "Kein Ergebnis ausgewählt",
+        "added_one_to_queue_log": "1 Titel zur Warteschlange hinzugefügt",
+        "added_count_to_queue_log": "{count} Titel zur Warteschlange hinzugefügt",
+        "select_one_for_download_now": "Wählen Sie ein einzelnes Ergebnis aus, um jetzt herunterzuladen",
+        "direct_download_already_running": "Direkter Download läuft bereits",
+        "download_log": "Download: {title} ({format})",
+        "added_to_queue_log": "Zur Warteschlange hinzugefügt: {title} ({format})",
+        "app_started": "App gestartet",
+        "finished_log": "Fertig: {title}",
+        "added_log": "Hinzugefügt: {title}",
+        "queue_finished": "Warteschlange beendet",
+        "next_task": "Weiter zur nächsten Aufgabe...",
+        "all_downloads_finished": "Alle Downloads sind abgeschlossen",
+        "settings_summary": "{count} Quelle(n) | {formats}",
+        "analyzing_url_log": "URL-Analyse: {url}",
+    },
+    "es": {
+        # Navigation
+        "search": "Búsqueda",
+        "queue": "Cola",
+        "settings": "Configuración",
+        "logs": "Registros",
+        "minimal_mode": "Modo Minimalista",
+
+        # Buttons
+        "download": "Descargar",
+        "search_btn": "Buscar",
+        "select_all": "Seleccionar todo",
+        "remove": "Eliminar",
+        "clear_queue": "Vaciar cola",
+        "change": "Cambiar",
+        "clear": "Limpiar",
+        "export": "Exportar",
+        "collapse": "Contraer",
+        "expand": "Expandir",
+
+        # Settings
+        "appearance": "Apariencia",
+        "theme": "Tema",
+        "dark": "Oscuro",
+        "light": "Claro",
+        "sources": "Fuentes",
+        "used_in_search": "Utilizadas en búsqueda.",
+        "formats": "Formatos",
+        "available_in_search": "Disponibles en la página de Búsqueda.",
+        "quality": "Calidad predeterminada",
+        "video": "Video",
+        "audio": "Audio",
+        "default_values_note": "Estos valores rellenan previamente las nuevas descargas.",
+        "output_folder": "Carpeta de salida",
+        "all_files_note": "Todos los archivos descargados se escribirán en esta carpeta.",
+
+        # Minimal mode
+        "drag_or_paste": "Arrastra una URL o pégala aquí...",
+        "back_to_desktop": "Volver al modo Escritorio",
+
+        # Progress
+        "download_progress": "Descarga",
+        "no_download": "Sin descargas pendientes.",
+
+        # Queue
+        "start_queue": "Iniciar cola",
+        "queue_empty": "Sin descargas pendientes.",
+        "launch_search_then_add": "Inicia una búsqueda y agrega un resultado a la cola.",
+
+        # Search page
+        "results": "Resultados",
+        "details": "Detalles",
+        "add_to_queue": "Agregar a la cola",
+        "download_now": "Descargar ahora",
+        "search_placeholder": "Buscar título, artista o pegar URL",
+        "format_label": "Formato",
+        "audio_bitrate_label": "Bitrate de audio",
+        "no_search": "Ninguna búsqueda iniciada.",
+        "select_result": "Selecciona un resultado para preparar la descarga.",
+
+        # Queue page
+        "running": "En ejecución",
+        "pending": "Pendiente",
+        "history": "Historial",
+
+        # Settings page
+        "language": "Idioma",
+        "select_folder": "Elegir carpeta",
+        "choose_folder": "Elegir carpeta",
+
+        # Buttons
+        "clear_logs": "Limpiar",
+        "export_logs": "Exportar",
+        "add_to_queue_btn": "Agregar a la cola",
+
+        # General
+        "youtube": "YouTube",
+        "soundcloud": "SoundCloud",
+        "bs_studio": "BS Studio",
+        "video_quality_label": "Calidad de video",
+        "searching": "Búsqueda en curso...",
+        "searching_short": "Buscando...",
+        "analyzing": "Analizando...",
+        "analyzing_url": "Analizando URL...",
+        "analyzing_url_results": "Analizando URL...",
+        "detecting_playlist": "Analizando la URL para detectar una playlist.",
+        "no_result_found": "No se encontró ningún resultado.",
+        "empty_query": "Consulta vacía",
+        "no_source_active": "Ninguna fuente activa",
+        "direct_url_ready": "URL directa lista",
+        "direct_link": "Enlace directo",
+        "link": "Enlace",
+        "untitled": "Sin título",
+        "title_label": "Título",
+        "source_label": "Fuente",
+        "duration_label": "Duración",
+        "selected_tracks": "{count} título(s) seleccionado(s)",
+        "to_add": "Para agregar",
+        "already_in_queue": "Ya en la cola",
+        "already_downloading": "Ya descargando",
+        "selection_already_queued": "La selección ya está en la cola.",
+        "result_already_queued": "Este resultado ya está en la cola.",
+        "result_already_downloading": "Este resultado ya se está descargando.",
+        "select_result_before_queue": "Selecciona un resultado antes de agregarlo a la cola.",
+        "add_selected_to_queue": "Agrega el resultado seleccionado a la cola.",
+        "add_all_selected_to_queue": "Agrega todos los resultados seleccionados a la cola.",
+        "add_remaining_to_queue": "Agrega solo los títulos que aún no están en la cola.",
+        "add_count_to_queue": "Agregar {count} a la cola",
+        "add_count_remaining": "Agregar {count} restante(s)",
+        "in_queue": "En la cola",
+        "playlist_loaded": "{count} título(s) listado(s) desde: {title}",
+        "select_multiple_for_queue": "Selecciona uno o varios títulos para agregarlos a la cola.",
+        "output_folder_path": "Carpeta de salida: {path}",
+        "no_current_download": "No hay descarga en curso.",
+        "queue_info_running": "1 en ejecución, {pending} pendiente(s)",
+        "queue_info_pending": "{pending} tarea(s) pendiente(s)",
+        "error": "Error",
+        "queue_started": "Cola iniciada",
+        "queue_is_empty": "Cola vacía",
+        "queue_cleared": "Cola vaciada",
+        "log_entries": "{count} entrada(s)",
+        "export_logs_title": "Exportar registros",
+        "logs_exported": "Registros exportados: {path}",
+        "theme_changed": "Tema: {theme}",
+        "language_changed": "Idioma cambiado a: {language}",
+        "enabled": "activado",
+        "disabled": "desactivado",
+        "source_status": "{source}: {status}",
+        "format_status": "{format}: {status}",
+        "one_format_required": "Al menos un formato debe permanecer activo",
+        "video_quality_changed": "Calidad de video: {quality}",
+        "audio_quality_changed": "Calidad de audio: {quality}",
+        "folder_changed": "Carpeta: {path}",
+        "collapse_sidebar": "Contraer barra lateral",
+        "expand_sidebar": "Expandir barra lateral",
+        "playlist_detected": "Playlist detectada: {count} título(s)",
+        "search_log": "Búsqueda: {query}",
+        "source_finished": "{source}: terminado",
+        "no_result_selected": "Ningún resultado seleccionado",
+        "added_one_to_queue_log": "1 título agregado a la cola",
+        "added_count_to_queue_log": "{count} títulos agregados a la cola",
+        "select_one_for_download_now": "Selecciona un solo resultado para descargar ahora",
+        "direct_download_already_running": "Descarga directa ya en curso",
+        "download_log": "Descarga: {title} ({format})",
+        "added_to_queue_log": "Agregado a la cola: {title} ({format})",
+        "app_started": "Aplicación iniciada",
+        "finished_log": "Terminado: {title}",
+        "added_log": "Agregado: {title}",
+        "queue_finished": "Cola terminada",
+        "next_task": "Pasando a la siguiente tarea...",
+        "all_downloads_finished": "Todas las descargas han terminado",
+        "settings_summary": "{count} fuente(s) | {formats}",
+        "analyzing_url_log": "Análisis URL: {url}",
+    }
+}
+
+
+class Translator:
+    """Simple translator for the application"""
+
+    def __init__(self, language: str = "fr"):
+        if language not in TRANSLATIONS:
+            language = "fr"
+        self.language = language
+        self.translations = TRANSLATIONS[language]
+
+    def get(self, key: str, default: str = None) -> str:
+        """Get translation for key"""
+        if key in self.translations:
+            return self.translations[key]
+        return default or key
+
+    def set_language(self, language: str):
+        """Change language"""
+        if language in TRANSLATIONS:
+            self.language = language
+            self.translations = TRANSLATIONS[language]
+
+    def get_available_languages(self) -> dict:
+        """Get available languages"""
+        return {
+            "fr": "Français",
+            "en": "English",
+            "de": "Deutsch",
+            "es": "Español"
+        }
+
+
+# Global translator instance
+_translator = Translator("fr")
+
+
+def get_translator() -> Translator:
+    """Get global translator instance"""
+    return _translator
+
+
+def t(key: str, default: str = None) -> str:
+    """Shorthand for translation"""
+    return _translator.get(key, default)
+
+
+def set_language(language: str):
+    """Set global language"""
+    _translator.set_language(language)

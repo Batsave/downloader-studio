@@ -1,0 +1,126 @@
+/* Minimaliste bicolore : Noir + Ambre */
+
+* {
+    font-family: "Segoe UI", sans-serif;
+}
+
+QMainWindow {
+    background: #0a0a0a;
+}
+
+QLabel {
+    color: #d4d4d4;
+    font-size: 13px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+}
+
+QLineEdit {
+    background: #1a1a1a;
+    color: #d4d4d4;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 13px;
+    selection-background-color: #f59e0b;
+}
+
+QLineEdit:focus {
+    border: 1px solid #f59e0b;
+}
+
+QComboBox {
+    background: #1a1a1a;
+    color: #d4d4d4;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+QComboBox:focus {
+    border: 1px solid #f59e0b;
+}
+
+QComboBox::drop-down {
+    border: none;
+}
+
+QComboBox::down-arrow {
+    image: none;
+}
+
+QListWidget {
+    background: #1a1a1a;
+    color: #d4d4d4;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 12px;
+    outline: none;
+}
+
+QListWidget::item:selected {
+    background: #262626;
+    border-radius: 4px;
+}
+
+QListWidget::item:hover {
+    background: #1f1f1f;
+    border-radius: 4px;
+}
+
+QProgressBar {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 6px;
+    height: 24px;
+    text-align: center;
+    color: #d4d4d4;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+QProgressBar::chunk {
+    background: #f59e0b;
+    border-radius: 4px;
+    margin: 2px;
+}
+
+QPushButton {
+    background: #f59e0b;
+    color: #0a0a0a;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    outline: none;
+}
+
+QPushButton:hover {
+    background: #f0a020;
+}
+
+QPushButton:pressed {
+    background: #e59b0b;
+}
+
+QPushButton:disabled {
+    background: #4a4a4a;
+    color: #888888;
+}
+
+QMessageBox {
+    background: #0a0a0a;
+}
+
+QMessageBox QLabel {
+    color: #d4d4d4;
+}
+
+QMessageBox QPushButton {
+    min-width: 80px;
+}
