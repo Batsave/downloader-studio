@@ -28,6 +28,12 @@ Le script compile:
 2. FFmpeg complet dans le dossier de l'application.
 3. L'installateur Inno Setup.
 
+Par defaut, le build est incremental: il garde le dossier
+`dist\DownloaderStudio\` et ne supprime pas les gros fichiers deja presents
+comme FFmpeg ou les DLL Python/PyQt. PyInstaller construit dans
+`dist\.pyinstaller\`, puis le resultat est fusionne dans le dossier final.
+FFmpeg est aussi garde en cache dans `dist\.ffmpeg-cache\bin`.
+
 ## Resultat
 
 ```text
@@ -56,6 +62,9 @@ temporaire.
 # Tout, par defaut
 .\.venv-build\Scripts\python build_exe.py
 
+# Clean du cache PyInstaller uniquement, sans supprimer dist\DownloaderStudio
+.\.venv-build\Scripts\python build_exe.py --clean-build
+
 # Sans FFmpeg
 .\.venv-build\Scripts\python build_exe.py --no-ffmpeg
 
@@ -64,6 +73,16 @@ temporaire.
 
 # Sans les deux
 .\.venv-build\Scripts\python build_exe.py --no-ffmpeg --no-installer
+```
+
+Depuis Git Bash:
+
+```bash
+# Build rapide, sans reinstall pip si les dependances existent deja
+./build.sh
+
+# Reinstaller/mettre a jour les dependances puis builder
+./build.sh --install-deps
 ```
 
 ## Erreurs courantes

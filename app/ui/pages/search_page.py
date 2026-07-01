@@ -878,6 +878,8 @@ class SearchPage(QWidget):
         self.parent.logs_page.add_log(msg)
         if self.direct_task:
             self.engine.add_history(self.direct_task, status, msg)
+            if hasattr(self.parent, "show_download_finished_popup"):
+                self.parent.show_download_finished_popup(self.direct_task, status, msg)
             self.direct_task = None
         if self.download_worker:
             self.download_worker.quit()

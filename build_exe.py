@@ -23,6 +23,8 @@ class Builder:
         self.project_dir = Path(__file__).parent
         self.dist_dir = self.project_dir / 'dist'
         self.app_dist_dir = self.dist_dir / 'DownloaderStudio'
+        self.pyinstaller_dist_dir = self.dist_dir / '.pyinstaller'
+        self.ffmpeg_cache_bin = self.dist_dir / '.ffmpeg-cache' / 'bin'
 
     def log(self, msg, level='info'):
         prefix = {'info': '  INFO', 'ok': '  OK', 'error': '  ERROR', 'header': '='}
@@ -97,18 +99,18 @@ class Builder:
         """Build executable with PyInstaller"""
         self.log("Building with PyInstaller...", 'header')
 
-        # Clean
-        for folder in ['build', 'dist', '__pycache__']:
-            if os.path.exists(folder):
-                if not self.remove_tree(folder):
-                    return False
+        if self.app_dist_dir.exists():
+            self.log(f"Keeping existing bundle: {self.app_dist_dir}", 'info')
+        else:
+            self.app_dist_dir.mkdir(parents=True, exist_ok=True)
 
         cmd = [
             sys.executable, '-m', 'PyInstaller',
             '--name=DownloaderStudio',
             '--onedir', '--windowed',
-            '--clean',
+            '--noconfirm',
             '--noupx',
+            f'--distpath={self.pyinstaller_dist_dir}',
             '--icon=assets/downloader-studio-logo.ico',
             f'--add-data=assets{os.pathsep}assets',
             f'--add-data=i18n{os.pathsep}i18n',
@@ -124,6 +126,12 @@ class Builder:
 
         result = subprocess.run(cmd, cwd=str(self.project_dir))
         if result.returncode == 0:
+            staged_app = self.pyinstaller_dist_dir / 'DownloaderStudio'
+            if not staged_app.exists():
+                self.log(f"PyInstaller output not found: {staged_app}", 'error')
+                return False
+
+            shutil.copytree(staged_app, self.app_dist_dir, dirs_exist_ok=True)
             exe = self.app_dist_dir / 'DownloaderStudio.exe'
             size_mb = exe.stat().st_size / (1024 * 1024)
             self.log(f"Built: {exe.relative_to(self.project_dir)} ({size_mb:.1f} MB)", 'ok')
@@ -142,6 +150,10 @@ class Builder:
         if (ffmpeg_bin / 'ffmpeg.exe').exists() and (ffmpeg_bin / 'ffprobe.exe').exists():
             self.log("FFmpeg already present", 'ok')
             return True
+
+        if (self.ffmpeg_cache_bin / 'ffmpeg.exe').exists() and (self.ffmpeg_cache_bin / 'ffprobe.exe').exists():
+            self.log(f"Found cached FFmpeg: {self.ffmpeg_cache_bin}", 'info')
+            return self._copy_ffmpeg(self.ffmpeg_cache_bin)
 
         # Try local installation
         local = self._find_local_ffmpeg()
@@ -198,7 +210,7 @@ class Builder:
             self._download_with_progress(url, str(zip_file))
 
             self.log("Extracting FFmpeg...", 'info')
-            dest = self.app_dist_dir / 'ffmpeg' / 'bin'
+            dest = self.ffmpeg_cache_bin
             dest.mkdir(parents=True, exist_ok=True)
 
             with ZipFile(zip_file) as zf:
@@ -232,8 +244,8 @@ class Builder:
             has_ffprobe = (dest / 'ffprobe.exe').exists()
 
             if has_ffmpeg and has_ffprobe:
-                self.log("FFmpeg ready", 'ok')
-                return True
+                self.log("FFmpeg cached", 'ok')
+                return self._copy_ffmpeg(dest)
             else:
                 self.log(f"Missing: ffmpeg={has_ffmpeg} ffprobe={has_ffprobe}", 'error')
                 return False
@@ -314,6 +326,11 @@ class Builder:
         if not self.validate_python_runtime():
             self.log("Build stopped before creating a broken release executable.", 'error')
             return False
+
+        if '--clean-build' in args:
+            for folder in [self.project_dir / 'build', self.pyinstaller_dist_dir, self.project_dir / '__pycache__']:
+                if folder.exists() and not self.remove_tree(folder):
+                    return False
 
         # PyInstaller
         if not self.build_pyinstaller():

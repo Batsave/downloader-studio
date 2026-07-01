@@ -166,6 +166,7 @@ class DownloadEngine(QObject):
     queue_updated = pyqtSignal()
     progress_updated = pyqtSignal(int, int)
     history_updated = pyqtSignal()
+    download_finished = pyqtSignal(object, str, str)
 
     def __init__(self):
         super().__init__()
@@ -305,6 +306,7 @@ class DownloadEngine(QObject):
 
         if finished_task:
             self.add_history(finished_task, status, msg)
+            self.download_finished.emit(finished_task, status, msg)
 
         self.current_task = None
         self.queue_updated.emit()

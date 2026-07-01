@@ -69,11 +69,15 @@ class QueuePage(QWidget):
         self.remove_btn = QPushButton(t("remove"))
         self.remove_btn.clicked.connect(self.remove_selected)
 
+        self.open_folder_btn = QPushButton(t("open_output_folder"))
+        self.open_folder_btn.clicked.connect(lambda _checked=False: self.open_output_folder())
+
         self.clear_btn = QPushButton(t("clear_queue"))
         self.clear_btn.clicked.connect(self.clear_queue)
 
         controls.addWidget(self.start_btn)
         controls.addWidget(self.remove_btn)
+        controls.addWidget(self.open_folder_btn)
         controls.addStretch()
         controls.addWidget(self.clear_btn)
         layout.addLayout(controls)
@@ -187,6 +191,7 @@ class QueuePage(QWidget):
 
         self.start_btn.setStyleSheet(primary)
         self.remove_btn.setStyleSheet(secondary)
+        self.open_folder_btn.setStyleSheet(secondary)
         self.clear_btn.setStyleSheet(secondary)
 
     def _task_text(self, idx, task, status):
@@ -297,6 +302,10 @@ class QueuePage(QWidget):
         self.engine.remove_task(pending_idx)
         self.update_queue_display()
 
+    def open_output_folder(self):
+        if hasattr(self.parent, "open_output_folder"):
+            self.parent.open_output_folder()
+
     def on_language_changed(self, language_code):
         """Handle language change - refresh UI texts"""
         self.refresh_ui_text()
@@ -308,6 +317,7 @@ class QueuePage(QWidget):
         self.history_title.setText(t("history"))
         self.start_btn.setText(t("start_queue"))
         self.remove_btn.setText(t("remove"))
+        self.open_folder_btn.setText(t("open_output_folder"))
         self.clear_btn.setText(t("clear_queue"))
         self.empty_label.setText(f"{t('queue_empty')}\n{t('launch_search_then_add')}")
         self.update_queue_display()

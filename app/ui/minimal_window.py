@@ -20,6 +20,9 @@ def create_svg_icon(name):
         "download": '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line>
         </svg>''',
+        "folder": '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+        </svg>''',
     }
 
     svg = icons.get(name, "")
@@ -35,6 +38,7 @@ def create_svg_icon(name):
 class MinimalWindow(QMainWindow):
     back_to_desktop = pyqtSignal()
     download_requested = pyqtSignal(str)
+    open_folder_requested = pyqtSignal()
 
     def __init__(self, parent, theme):
         super().__init__()
@@ -78,6 +82,26 @@ class MinimalWindow(QMainWindow):
         # Dynamic icon color based on theme for close button
         # Detect if it's dark theme by checking text color
         icon_color = "#ffffff" if self.theme.get("text") == "#fafafa" else "#1a1a1a"
+
+        folder_btn = QPushButton()
+        folder_btn.setIcon(create_svg_icon("folder"))
+        folder_btn.setIconSize(QSize(16, 16))
+        folder_btn.setToolTip(t("open_output_folder"))
+        folder_btn.setStyleSheet(f"""
+            QPushButton {{
+                background: transparent;
+                border: none;
+                padding: 4px;
+            }}
+            QPushButton:hover {{
+                background: {self.theme['panel_alt']};
+                border-radius: 4px;
+            }}
+        """)
+        folder_btn.setMinimumSize(24, 24)
+        folder_btn.setMaximumSize(24, 24)
+        folder_btn.clicked.connect(self.open_folder_requested.emit)
+        title_layout.addWidget(folder_btn)
 
         expand_btn = QPushButton()
         # Use colored SVG icon based on theme

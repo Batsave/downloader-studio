@@ -222,6 +222,7 @@ class Downloader(QMainWindow):
         self.minimal_window = None
         self.is_minimal_mode = False
         self.update_thread = None
+        self.active_message_boxes = []
 
         # Engine de téléchargement
         self.download_engine = DownloadEngine()
@@ -291,6 +292,7 @@ class Downloader(QMainWindow):
         self.download_engine.log_signal.connect(self.logs_page.add_log)
         self.download_engine.queue_updated.connect(self.update_queue_badge)
         self.download_engine.progress_updated.connect(self.update_progress_display)
+        self.download_engine.download_finished.connect(self.show_download_finished_popup)
         self.update_nav_state(0)
         self.update_queue_badge()
 
@@ -813,6 +815,70 @@ class Downloader(QMainWindow):
                 else:
                     self.progress_circle.setVisible(False)
 
+    def open_output_folder(self):
+        from i18n import t
+        output_dir = self.download_engine.output_dir or DEFAULT_OUTPUT_DIR
+        try:
+            Path(output_dir).mkdir(parents=True, exist_ok=True)
+            opened = QDesktopServices.openUrl(QUrl.fromLocalFile(str(Path(output_dir).resolve())))
+            if not opened and hasattr(self, "logs_page"):
+                self.logs_page.add_log(t("open_output_folder_failed").format(path=output_dir))
+            return opened
+        except Exception as exc:
+            logger.error("Unable to open output folder: %s", exc, exc_info=True)
+            if hasattr(self, "logs_page"):
+                self.logs_page.add_log(t("open_output_folder_failed").format(path=output_dir))
+            return False
+
+    def show_download_finished_popup(self, task, status, msg):
+        if status != "completed":
+            return
+
+        from i18n import t
+        title = getattr(task, "title", "") or t("untitled")
+        parent_widget = self.minimal_window if self.is_minimal_mode and self.minimal_window else self
+        box = QMessageBox(parent_widget)
+        box.setWindowTitle(t("download_finished_title"))
+        box.setText(t("download_finished_body").format(title=title))
+        box.setInformativeText(t("download_finished_folder").format(path=self.download_engine.output_dir))
+
+        open_button = box.addButton(t("open_output_folder"), QMessageBox.AcceptRole)
+        box.addButton(t("close"), QMessageBox.RejectRole)
+        open_button.clicked.connect(lambda _checked=False: self.open_output_folder())
+
+        theme = self.theme
+        box.setStyleSheet(f"""
+            QMessageBox {{
+                background: {theme['bg']};
+            }}
+            QMessageBox QLabel {{
+                color: {theme['text']};
+                background: transparent;
+            }}
+            QPushButton {{
+                background: {theme['accent']};
+                color: {theme['accent_text']};
+                border: none;
+                border-radius: 6px;
+                padding: 8px 16px;
+                font-weight: 600;
+                min-width: 90px;
+            }}
+            QPushButton:hover {{
+                background: {theme['accent_hover']};
+            }}
+        """)
+
+        self.active_message_boxes.append(box)
+
+        def cleanup(*_args):
+            if box in self.active_message_boxes:
+                self.active_message_boxes.remove(box)
+            box.deleteLater()
+
+        box.finished.connect(cleanup)
+        box.open()
+
     def switch_page(self, idx):
         self.stacked.setCurrentIndex(idx)
         self.update_nav_state(idx)
@@ -833,6 +899,7 @@ class Downloader(QMainWindow):
         self.minimal_window = MinimalWindow(self, self.theme)
         self.minimal_window.back_to_desktop.connect(self.exit_minimal_mode)
         self.minimal_window.download_requested.connect(self.on_minimal_download)
+        self.minimal_window.open_folder_requested.connect(self.open_output_folder)
         self.minimal_window.show()
 
     def exit_minimal_mode(self):

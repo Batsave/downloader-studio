@@ -7,7 +7,7 @@ from pathlib import Path
 
 # App info
 APP_NAME = "Downloader Studio"
-APP_VERSION = "2.15.0"
+APP_VERSION = "2.16.0"
 APP_AUTHOR = "BS Studio"
 APP_GITHUB_REPO = "batsave/downloader-studio"
 APP_RELEASES_URL = f"https://github.com/{APP_GITHUB_REPO}/releases"
