@@ -155,11 +155,6 @@ class SettingsPage(QWidget):
         self.update_btn.clicked.connect(self.check_updates)
         layout.addWidget(self.update_btn)
 
-        credit = QLabel("BS Studio - V2.12")
-        credit.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        credit.setObjectName("settingsCredit")
-        layout.addWidget(credit)
-
         group.setLayout(layout)
         return group
 

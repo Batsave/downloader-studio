@@ -1,12 +1,10 @@
-# 🚀 Build - Downloader Studio
+# Build - Downloader Studio
 
-Un script pour tout faire. C'est simple.
+## Installation, une fois
 
-## Installation (une fois)
-
-Utilise Python 3.13 x64 pour les releases Windows. Ne compile pas l'EXE avec
-Python 3.14 ou 3.15 pour ce projet: PyInstaller peut produire un binaire qui
-plante au lancement avec `Failed to load Python DLL`.
+Utilise Python 3.13 x64 pour les releases Windows. Ne compile pas l'application
+avec Python 3.14 ou 3.15 pour ce projet: PyInstaller peut produire un binaire
+qui plante au lancement avec `Failed to load Python DLL`.
 
 ```powershell
 py -3.13 -m venv .venv-build
@@ -14,46 +12,48 @@ py -3.13 -m venv .venv-build
 .\.venv-build\Scripts\python -m pip install -r requirements.txt pyinstaller
 ```
 
-Inno Setup (pour installer):
+Inno Setup, pour produire l'installateur:
+
 - https://jrsoftware.org/isdl.php
 
 ## Compiler tout
 
-```bash
+```powershell
 .\.venv-build\Scripts\python build_exe.py
 ```
 
-Ça compile:
-1. ✓ App avec PyInstaller
-2. ✓ FFmpeg complet (bin embarque dans l'installateur)
-3. ✓ Installateur Inno Setup
+Le script compile:
 
-**Temps**: 2-5 min (dépend FFmpeg)
+1. L'application avec PyInstaller en mode `onedir`.
+2. FFmpeg complet dans le dossier de l'application.
+3. L'installateur Inno Setup.
 
-## Résultat
+## Resultat
 
-```
-dist/DownloaderStudio.exe          ← App portable
-dist/DownloaderStudio*_Setup.exe   <- Installateur (distribue le plus recent)
-dist/ffmpeg/bin/                   <- FFmpeg complet utilise par l'app
-```
-
-## Utilisation
-
-### App portable
-```bash
-dist/DownloaderStudio.exe
+```text
+dist\DownloaderStudio\DownloaderStudio.exe   <- app portable
+dist\DownloaderStudio\ffmpeg\bin\            <- FFmpeg utilise par l'app
+dist\DownloaderStudio*_Setup.exe             <- installateur
 ```
 
-### Installateur (utilisateur)
-1. Double-clique le dernier `DownloaderStudio*_Setup.exe`
-2. FFmpeg est installe automatiquement avec l'application
-3. App prête
+Distribue en priorite le dernier `DownloaderStudio*_Setup.exe`.
+Pour une version portable, distribue le dossier `dist\DownloaderStudio\` complet,
+pas seulement `DownloaderStudio.exe`.
+
+## Pourquoi `onedir`
+
+Le mode PyInstaller `onefile` extrait Python dans `%TEMP%\_MEI...` au lancement.
+Sur certains PC, Defender, un antivirus ou une politique de droits peut bloquer
+ou supprimer `python313.dll`, ce qui provoque `Failed to load Python DLL`.
+
+Le mode `onedir` garde `python313.dll`, `python3.dll`, les DLL PyQt et FFmpeg a
+cote de l'executable installe. Le lancement ne depend donc plus d'une extraction
+temporaire.
 
 ## Options
 
-```bash
-# Tout (par défaut)
+```powershell
+# Tout, par defaut
 .\.venv-build\Scripts\python build_exe.py
 
 # Sans FFmpeg
@@ -66,45 +66,17 @@ dist/DownloaderStudio.exe
 .\.venv-build\Scripts\python build_exe.py --no-ffmpeg --no-installer
 ```
 
-## FFmpeg
+## Erreurs courantes
 
-### Local
-Si tu as FFmpeg à `C:\ffmpeg\bin`, il va l'utiliser automatiquement.
+**`Failed to load Python DLL` au lancement**
 
-### Télécharger
-Sinon, le script telecharge un build release de FFmpeg et copie tout le dossier `bin`.
+- Verifie que l'utilisateur lance la build `onedir` actuelle ou l'installateur actuel.
+- Ne distribue pas l'ancien `dist\DownloaderStudio.exe` seul.
+- Si le PC bloque encore le lancement, verifier l'historique Windows Defender.
+- Installer/reparer Microsoft Visual C++ Redistributable 2015-2022 x64.
 
-## Erreurs Courantes
+**`FFmpeg download failed`**
 
-**"PyInstaller not found"**
-```powershell
-.\.venv-build\Scripts\python -m pip install pyinstaller
-```
-
-**"Failed to load Python DLL" au lancement**
-- Supprime `build/` et `dist/`.
-- Recompile avec Python 3.13 x64 via `.venv-build`.
-- Verifie que la build n'utilise pas Python 3.14/3.15.
-
-**"Inno Setup not found"**
-- Télécharger: https://jrsoftware.org/isdl.php
-- Installer normalement
-- Relancer `.\.venv-build\Scripts\python build_exe.py`
-
-**"FFmpeg download failed"**
-- Vérifier internet
-- Ou installer manuellement: https://ffmpeg.org/download.html
-- Continuer avec `--no-ffmpeg`
-
-## Checklist
-
-- [ ] PyInstaller installé
-- [ ] Inno Setup installé (optionnel)
-- [ ] `.\.venv-build\Scripts\python build_exe.py` fonctionne
-- [ ] `dist/DownloaderStudio.exe` existe
-- [ ] `dist/DownloaderStudio*_Setup.exe` cree (si Inno)
-- [ ] Distribuer l'installer
-
----
-
-**C'est tout!** Un script = tout compilé. 🎉
+- Verifier la connexion internet.
+- Ou installer FFmpeg localement dans `C:\ffmpeg\bin`.
+- Puis relancer `.\.venv-build\Scripts\python build_exe.py`.

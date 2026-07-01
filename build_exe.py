@@ -3,6 +3,7 @@ Complete build script for Downloader Studio
 Builds PyInstaller exe + Inno Setup installer + FFmpeg setup
 """
 
+import ast
 import os
 import shutil
 import subprocess
@@ -21,10 +22,26 @@ class Builder:
     def __init__(self):
         self.project_dir = Path(__file__).parent
         self.dist_dir = self.project_dir / 'dist'
+        self.app_dist_dir = self.dist_dir / 'DownloaderStudio'
 
     def log(self, msg, level='info'):
         prefix = {'info': '  INFO', 'ok': '  OK', 'error': '  ERROR', 'header': '='}
         print(f"{prefix.get(level, level)} {msg}")
+
+    def get_app_version(self):
+        config_path = self.project_dir / 'config.py'
+        tree = ast.parse(config_path.read_text(encoding='utf-8'), filename=str(config_path))
+
+        for node in tree.body:
+            if (
+                isinstance(node, ast.Assign)
+                and any(isinstance(target, ast.Name) and target.id == 'APP_VERSION' for target in node.targets)
+                and isinstance(node.value, ast.Constant)
+                and isinstance(node.value.value, str)
+            ):
+                return node.value.value
+
+        raise RuntimeError("APP_VERSION not found in config.py")
 
     def validate_python_runtime(self):
         """Prevent release builds with Python versions that produce fragile PyInstaller EXEs."""
@@ -89,7 +106,7 @@ class Builder:
         cmd = [
             sys.executable, '-m', 'PyInstaller',
             '--name=DownloaderStudio',
-            '--onefile', '--windowed',
+            '--onedir', '--windowed',
             '--clean',
             '--noupx',
             '--icon=assets/downloader-studio-logo.ico',
@@ -107,9 +124,9 @@ class Builder:
 
         result = subprocess.run(cmd, cwd=str(self.project_dir))
         if result.returncode == 0:
-            exe = self.dist_dir / 'DownloaderStudio.exe'
+            exe = self.app_dist_dir / 'DownloaderStudio.exe'
             size_mb = exe.stat().st_size / (1024 * 1024)
-            self.log(f"Built: DownloaderStudio.exe ({size_mb:.1f} MB)", 'ok')
+            self.log(f"Built: {exe.relative_to(self.project_dir)} ({size_mb:.1f} MB)", 'ok')
             return True
         else:
             self.log("PyInstaller build failed", 'error')
@@ -119,7 +136,7 @@ class Builder:
         """Find or download FFmpeg"""
         self.log("Setting up FFmpeg...", 'header')
 
-        ffmpeg_bin = self.dist_dir / 'ffmpeg' / 'bin'
+        ffmpeg_bin = self.app_dist_dir / 'ffmpeg' / 'bin'
 
         # Check if already exists
         if (ffmpeg_bin / 'ffmpeg.exe').exists() and (ffmpeg_bin / 'ffprobe.exe').exists():
@@ -154,7 +171,7 @@ class Builder:
 
     def _copy_ffmpeg(self, source):
         """Copy the complete FFmpeg bin folder from a local installation."""
-        dest = self.dist_dir / 'ffmpeg' / 'bin'
+        dest = self.app_dist_dir / 'ffmpeg' / 'bin'
         dest.mkdir(parents=True, exist_ok=True)
 
         for item in source.iterdir():
@@ -181,7 +198,7 @@ class Builder:
             self._download_with_progress(url, str(zip_file))
 
             self.log("Extracting FFmpeg...", 'info')
-            dest = self.dist_dir / 'ffmpeg' / 'bin'
+            dest = self.app_dist_dir / 'ffmpeg' / 'bin'
             dest.mkdir(parents=True, exist_ok=True)
 
             with ZipFile(zip_file) as zf:
@@ -239,6 +256,8 @@ class Builder:
     def build_inno_installer(self):
         """Build Inno Setup installer"""
         self.log("Building Inno Setup installer...", 'header')
+        app_version = self.get_app_version()
+        self.log(f"Installer version: {app_version}", 'info')
 
         inno_paths = [
             r'A:\Inno Setup 6\ISCC.exe',
@@ -265,7 +284,7 @@ class Builder:
             return False
 
         result = subprocess.run(
-            [inno, str(iss_file)],
+            [inno, f'/DMyAppVersion={app_version}', str(iss_file)],
             cwd=str(self.project_dir),
             capture_output=True,
             text=True
@@ -308,12 +327,15 @@ class Builder:
 
         # Inno Setup
         if '--no-installer' not in args:
-            self.build_inno_installer()
+            if not self.build_inno_installer():
+                self.log("Installer build failed", 'error')
+                return False
 
         print("\n" + "=" * 60)
         self.log("Build complete!", 'ok')
         print("=" * 60)
-        print(f"\n  App:       dist/DownloaderStudio.exe")
+        print(f"\n  App:       dist/DownloaderStudio/DownloaderStudio.exe")
+        print("  Portable:  dist/DownloaderStudio/")
         print("  Installer: dist/DownloaderStudio*_Setup.exe")
         print("\n  Distribute the newest DownloaderStudio*_Setup.exe\n")
 
