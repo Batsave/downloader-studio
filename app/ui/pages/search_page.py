@@ -208,8 +208,8 @@ class SearchPage(QWidget):
         results_header_layout.addStretch()
         self.select_all_btn = QPushButton(t("select_all"))
         self.select_all_btn.setObjectName("selectAllBtn")
-        self.select_all_btn.setMaximumWidth(110)
-        self.select_all_btn.setMinimumHeight(24)
+        self.select_all_btn.setMinimumWidth(120)
+        self.select_all_btn.setMinimumHeight(32)
         self.select_all_btn.clicked.connect(self.select_all_results)
         self.select_all_btn.setVisible(False)
         results_header_layout.addWidget(self.select_all_btn)
@@ -338,6 +338,68 @@ class SearchPage(QWidget):
             }}
             QListWidget::item:hover {{
                 background: {t['panel_alt']};
+            }}
+            QScrollBar:vertical {{
+                background: {t['panel']};
+                width: 16px;
+                margin: 0px;
+                border-left: 1px solid {t['border']};
+            }}
+            QScrollBar::handle:vertical {{
+                background: {t['accent']};
+                border-radius: 8px;
+                min-height: 40px;
+                margin: 4px 2px 4px 2px;
+                border: none;
+            }}
+            QScrollBar::handle:vertical:hover {{
+                background: {t['accent_hover']};
+            }}
+            QScrollBar::handle:vertical:pressed {{
+                background: {t['accent']};
+            }}
+            QScrollBar::add-line:vertical {{
+                height: 0px;
+            }}
+            QScrollBar::sub-line:vertical {{
+                height: 0px;
+            }}
+            QScrollBar::add-page:vertical {{
+                background: none;
+            }}
+            QScrollBar::sub-page:vertical {{
+                background: none;
+            }}
+            QScrollBar:horizontal {{
+                background: {t['panel']};
+                height: 16px;
+                margin: 0px;
+                border-top: 1px solid {t['border']};
+            }}
+            QScrollBar::handle:horizontal {{
+                background: {t['accent']};
+                border-radius: 8px;
+                min-width: 40px;
+                margin: 2px 4px 2px 4px;
+                border: none;
+            }}
+            QScrollBar::handle:horizontal:hover {{
+                background: {t['accent_hover']};
+            }}
+            QScrollBar::handle:horizontal:pressed {{
+                background: {t['accent']};
+            }}
+            QScrollBar::add-line:horizontal {{
+                width: 0px;
+            }}
+            QScrollBar::sub-line:horizontal {{
+                width: 0px;
+            }}
+            QScrollBar::add-page:horizontal {{
+                background: none;
+            }}
+            QScrollBar::sub-page:horizontal {{
+                background: none;
             }}
         """)
         self.preview_info.setStyleSheet(self.preview_style(selected=self.preview_selected))

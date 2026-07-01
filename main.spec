@@ -1,5 +1,11 @@
 # -*- mode: python ; coding: utf-8 -*-
+import sys
 
+if sys.version_info.releaselevel != 'final' or not ((3, 10) <= sys.version_info[:2] <= (3, 13)):
+    raise SystemExit(
+        'Build Downloader Studio with CPython 3.10-3.13 final. '
+        'Python 3.14/3.15 builds can fail at startup with python*.dll load errors.'
+    )
 
 a = Analysis(
     ['main.py'],
@@ -26,7 +32,7 @@ exe = EXE(
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=True,
+    upx=False,
     upx_exclude=[],
     runtime_tmpdir=None,
     console=False,

@@ -3,6 +3,7 @@ import os
 import logging
 import ctypes
 import json
+import time
 import requests
 import subprocess
 import tempfile
@@ -1012,7 +1013,11 @@ class Downloader(QMainWindow):
 
                 self.logs_page.add_log(t("update_download_complete"))
 
-                subprocess.Popen([installer_path, '/S'])
+                # Run Inno Setup installer silently without auto-restart.
+                subprocess.Popen([installer_path, '/VERYSILENT', '/NORESTART'], shell=False)
+
+                # Give installer time to start before closing app
+                time.sleep(1)
                 QApplication.quit()
 
             except Exception as e:

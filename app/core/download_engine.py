@@ -2,6 +2,8 @@ from PyQt5.QtCore import QThread, pyqtSignal, QObject
 from i18n import t
 from config import DEFAULT_OUTPUT_DIR
 import os
+import shutil
+import sys
 import yt_dlp
 
 
@@ -25,6 +27,52 @@ class DownloadWorker(QThread):
         super().__init__()
         self.task = task
         self.output_dir = output_dir
+        self.ffmpeg_location = self._setup_ffmpeg_path()
+
+    @staticmethod
+    def _setup_ffmpeg_path():
+        """Configure and return the bundled FFmpeg bin directory for yt-dlp."""
+        def use_if_valid(path):
+            ffmpeg_exe = os.path.join(path, 'ffmpeg.exe')
+            ffprobe_exe = os.path.join(path, 'ffprobe.exe')
+            if os.path.exists(ffmpeg_exe) and os.path.exists(ffprobe_exe):
+                os.environ['PATH'] = path + os.pathsep + os.environ.get('PATH', '')
+                return path
+            return None
+
+        possible_paths = []
+
+        if getattr(sys, 'frozen', False):
+            # PyInstaller one-file extracts to _MEIPASS, while Inno installs FFmpeg
+            # next to the executable.
+            exe_dir = os.path.dirname(sys.executable)
+            bundle_dir = getattr(sys, '_MEIPASS', '')
+            possible_paths.extend([
+                os.path.join(exe_dir, 'ffmpeg', 'bin'),
+                os.path.join(exe_dir, 'ffmpeg'),
+                os.path.join(bundle_dir, 'ffmpeg', 'bin'),
+                os.path.join(bundle_dir, 'ffmpeg'),
+            ])
+        else:
+            project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+            possible_paths.extend([
+                os.path.join(project_root, 'dist', 'ffmpeg', 'bin'),
+                'C:\\ffmpeg\\bin',
+                'C:\\ffmpeg-master-latest-win64-gpl\\bin',
+                os.path.expanduser('~\\ffmpeg\\bin'),
+            ])
+
+        for path in possible_paths:
+            found = use_if_valid(path)
+            if found:
+                return found
+
+        ffmpeg = shutil.which('ffmpeg')
+        ffprobe = shutil.which('ffprobe')
+        if ffmpeg and ffprobe:
+            return os.path.dirname(ffmpeg)
+
+        return None
 
     @staticmethod
     def _audio_quality(value):
@@ -73,6 +121,8 @@ class DownloadWorker(QThread):
                 "socket_timeout": 30,
                 "http_headers": {"User-Agent": "Mozilla/5.0"},
             }
+            if self.ffmpeg_location:
+                opts["ffmpeg_location"] = self.ffmpeg_location
 
             if self.task.fmt == "mp3":
                 opts["format"] = "bestaudio/best"
